@@ -6,7 +6,7 @@ from pose.utils.CurvaDedo import CurvaDeDedo
 from pose.utils.PosicionDedo import PosicionDedo
 
 #estimacion del la pose del Dedo
-class FingerPoseEstimate:
+class EstimacionPoseDedo:
     def __init__(self, coords_xyz):
         self.coords_xyz = np.squeeze(coords_xyz)
         self.finger_position = [PosicionDedo.HaciaArriba, PosicionDedo.HaciaArriba,
@@ -18,7 +18,7 @@ class FingerPoseEstimate:
         self.slopes_yz = []
 
     #obtener pendiente punto a punto con la ecuacion basica m=(y2-y2)/(x2-x1)
-    def get_slope(self, point1, point2):
+    def get_pendiente(self, point1, point2):
         slope_xy = self._calculate_slope_procedure(point1[0], point1[1], point2[0], point2[1])
         if len(point1) == 2:
             return slope_xy
@@ -27,15 +27,15 @@ class FingerPoseEstimate:
         return slope_xy, slope_yz
 
     #CAlcular la pendiente de los dedos
-    def calculate_slope_of_fingers(self):
+    def calcula_pendiente_dedos(self):
         for finger in Dedo:
 
-            points = Dedo.get_array_of_points(finger)
+            points = Dedo.obtener_array_puntos(finger)
             slope_at_xy, slope_at_yz = [], []
             for point in points:
                 point1 = self.coords_xyz[point[0]]
                 point2 = self.coords_xyz[point[1]]
-                slope_xy, slope_yz = self.get_slope(point1, point2)
+                slope_xy, slope_yz = self.get_pendiente(point1, point2)
                 slope_at_xy.append(slope_xy)
                 slope_at_yz.append(slope_yz)
 
@@ -43,7 +43,7 @@ class FingerPoseEstimate:
             self.slopes_yz.append(slope_at_yz)
 
     #calcular el angulo de orientacion
-    def angle_orientation_at(self, angle, weightage_at = 1.0):
+    def angulo_orientacion_en(self, angle, weightage_at = 1.0):
         is_vertical, is_diagonal, is_horizontal = 0, 0, 0
         if angle >= 75.0 and angle <= 105.0:
             is_vertical = 1 * weightage_at
@@ -54,7 +54,7 @@ class FingerPoseEstimate:
         return (is_vertical, is_diagonal, is_horizontal)
 
     #modulo para calcular el rizado o curvatura del dedo
-    def is_finger_curled(self, start_point, mid_point, end_point):
+    def esta_dedo_curveado(self, start_point, mid_point, end_point):
         start_mid_x_dist = start_point[0] - mid_point[0]
         start_end_x_dist = start_point[0] - end_point[0]
         mid_end_x_dist = mid_point[0] - end_point[0]
@@ -95,7 +95,7 @@ class FingerPoseEstimate:
         return finger_curled
 
     #modulo para definir si va a la derecha o izquierda horizontal sin angulo
-    def estimate_horizontal_direction(self, start_end_x_dist, start_mid_x_dist, mid_end_x_dist, max_dist_x):
+    def estimar_direccion_horizontal(self, start_end_x_dist, start_mid_x_dist, mid_end_x_dist, max_dist_x):
         reqd_direction = None
         if max_dist_x == abs(start_end_x_dist):
             if start_end_x_dist > 0:
@@ -115,7 +115,7 @@ class FingerPoseEstimate:
         return reqd_direction
 
     # modulo para definir si apunta haciaa arriba o abajo verticalmente sin angulo
-    def estimate_vertical_direction(self, start_end_y_dist, start_mid_y_dist, mid_end_y_dist, max_dist_y):
+    def estimar_direccion_vertical(self, start_end_y_dist, start_mid_y_dist, mid_end_y_dist, max_dist_y):
         reqd_direction = None
         if max_dist_y == abs(start_end_y_dist):
             if start_end_y_dist < 0:
@@ -135,15 +135,15 @@ class FingerPoseEstimate:
         return reqd_direction
 
     #Modulo que estima la direccion de la diagonal del dedo
-    def estimate_diagonal_direction(self, start_end_y_dist, start_mid_y_dist, mid_end_y_dist, max_dist_y,\
+    def estimar_direccion_diagonal(self, start_end_y_dist, start_mid_y_dist, mid_end_y_dist, max_dist_y, \
                                    start_end_x_dist, start_mid_x_dist, mid_end_x_dist, max_dist_x):
         reqd_direction = None
-        reqd_vertical_direction = self.estimate_vertical_direction(start_end_y_dist,
-                                                                   start_mid_y_dist, 
-                                                                   mid_end_y_dist, max_dist_y)
-        reqd_horizontal_direction = self.estimate_horizontal_direction(start_end_x_dist,
-                                                                       start_mid_x_dist,
-                                                                       mid_end_x_dist, max_dist_x)
+        reqd_vertical_direction = self.estimar_direccion_vertical(start_end_y_dist,
+                                                                  start_mid_y_dist,
+                                                                  mid_end_y_dist, max_dist_y)
+        reqd_horizontal_direction = self.estimar_direccion_horizontal(start_end_x_dist,
+                                                                      start_mid_x_dist,
+                                                                      mid_end_x_dist, max_dist_x)
         
 
         if reqd_vertical_direction == PosicionDedo.HaciaArriba:
@@ -159,7 +159,7 @@ class FingerPoseEstimate:
         return reqd_direction
 
     #modulo para calcular hacia donde apunta el dedo
-    def calculate_direction_of_finger(self, start_point, mid_point, end_point, finger_slopes):
+    def calcular_direccion_dedo(self, start_point, mid_point, end_point, finger_slopes):
         start_mid_x_dist = start_point[0] - mid_point[0]
         start_end_x_dist = start_point[0] - end_point[0]
         mid_end_x_dist = mid_point[0] - end_point[0]
@@ -199,15 +199,15 @@ class FingerPoseEstimate:
         calc_start_point = (calc_start_point_x, calc_start_point_y)
         calc_end_point = (calc_end_point_x, calc_end_point_y)
 
-        total_angle = self.get_slope(calc_start_point, calc_end_point)
-        vote1, vote2, vote3 = self.angle_orientation_at(total_angle, weightage_at = TOTAL_ANGLE_VOTE_POWER)
+        total_angle = self.get_pendiente(calc_start_point, calc_end_point)
+        vote1, vote2, vote3 = self.angulo_orientacion_en(total_angle, weightage_at = TOTAL_ANGLE_VOTE_POWER)
         vote_vertical += vote1
         vote_diagonal += vote2
         vote_horizontal += vote3
         #print('Iteration 2: Total Angle = {:.3f}, ({}, {}, {})'.format(total_angle, vote1, vote2, vote3))
         
         for finger_slope in finger_slopes:
-            vote1, vote2, vote3 = self.angle_orientation_at(finger_slope, weightage_at = SINGLE_ANGLE_VOTE_POWER)
+            vote1, vote2, vote3 = self.angulo_orientacion_en(finger_slope, weightage_at = SINGLE_ANGLE_VOTE_POWER)
             vote_vertical += vote1
             vote_diagonal += vote2
             vote_horizontal += vote3
@@ -217,36 +217,36 @@ class FingerPoseEstimate:
         # En caso de empate va priorizar Vertical, seguida de horizontal y luego diagonal.
         reqd_direction = None
         if vote_vertical == max(vote_vertical, vote_diagonal, vote_horizontal):
-            reqd_direction = self.estimate_vertical_direction(start_end_y_dist,
-                                                              start_mid_y_dist, 
-                                                              mid_end_y_dist, max_dist_y)
+            reqd_direction = self.estimar_direccion_vertical(start_end_y_dist,
+                                                             start_mid_y_dist,
+                                                             mid_end_y_dist, max_dist_y)
         elif vote_horizontal == max(vote_diagonal, vote_horizontal):
-            reqd_direction = self.estimate_horizontal_direction(start_end_x_dist,
-                                                                start_mid_x_dist,
-                                                                mid_end_x_dist, max_dist_x)
+            reqd_direction = self.estimar_direccion_horizontal(start_end_x_dist,
+                                                               start_mid_x_dist,
+                                                               mid_end_x_dist, max_dist_x)
         else:
-            reqd_direction = self.estimate_diagonal_direction(start_end_y_dist, start_mid_y_dist,
-                                                              mid_end_y_dist, max_dist_y,
-                                                              start_end_x_dist, start_mid_x_dist,
-                                                              mid_end_x_dist, max_dist_x)
+            reqd_direction = self.estimar_direccion_diagonal(start_end_y_dist, start_mid_y_dist,
+                                                             mid_end_y_dist, max_dist_y,
+                                                             start_end_x_dist, start_mid_x_dist,
+                                                             mid_end_x_dist, max_dist_x)
         #print('Vote at {}, {}, {}'.format(vote_vertical, vote_diagonal, vote_horizontal))
         return reqd_direction
     
-    def calculate_orientation_of_fingers(self, print_finger_info):
+    def calcular_orientacion_dedos(self, print_finger_info):
         for finger in Dedo:
             point_index_at = 0
             if finger == Dedo.Pulgar:
                 point_index_at = 1
             angle_at = self.slopes_xy[finger][point_index_at]
             
-            finger_points_at = Dedo.get_array_of_points(finger)
+            finger_points_at = Dedo.obtener_array_puntos(finger)
             start_point_at = self.coords_xyz[finger_points_at[point_index_at][0]]
             mid_point_at = self.coords_xyz[finger_points_at[point_index_at + 1][1]]
             end_point_at = self.coords_xyz[finger_points_at[3][1]]
             
-            finger_curled = self.is_finger_curled(start_point_at, mid_point_at, end_point_at)
+            finger_curled = self.esta_dedo_curveado(start_point_at, mid_point_at, end_point_at)
 
-            finger_position = self.calculate_direction_of_finger(start_point_at, mid_point_at, end_point_at,
+            finger_position = self.calcular_direccion_dedo(start_point_at, mid_point_at, end_point_at,
                                                                  self.slopes_xy[finger][point_index_at:])
             #print('Finger: {} = {}'.format(Finger.get_finger_name(finger),
             #                              PosicionDedo.get_finger_position_name(finger_position)))
@@ -257,13 +257,13 @@ class FingerPoseEstimate:
         if print_finger_info:
             for finger_index, curl, pos in zip(Dedo, self.finger_curled, self.finger_position):
                 print('Dedo: {}, Curva: {}, Orientacion: {}'.format(
-                        Dedo.get_finger_name(finger_index), CurvaDeDedo.get_finger_curled_name(curl),
-                        PosicionDedo.get_finger_position_name(pos)))
+                        Dedo.obtener_nombre_dedo(finger_index), CurvaDeDedo.get_nombre_curvatura_dedo(curl),
+                        PosicionDedo.get_nombre_posicion_dedo(pos)))
 
 
-    def calculate_positions_of_fingers(self, print_finger_info):
-        self.calculate_slope_of_fingers()
-        self.calculate_orientation_of_fingers(print_finger_info)
+    def calcular_posicion_dedos(self, print_finger_info):
+        self.calcula_pendiente_dedos()
+        self.calcular_orientacion_dedos(print_finger_info)
 
     
     # Private methods

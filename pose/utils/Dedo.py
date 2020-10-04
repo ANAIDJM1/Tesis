@@ -8,7 +8,7 @@ class Dedo(IntEnum):
     Menhique = 4
     
     @staticmethod
-    def get_array_of_points(finger):
+    def obtener_array_puntos(finger):
         finger_array = None
         if finger == Dedo.Pulgar:
             finger_array = [(0, 4), (4, 3), (3, 2), (2, 1)]
@@ -23,7 +23,7 @@ class Dedo(IntEnum):
         return finger_array
     
     @staticmethod
-    def get_finger_name(finger):
+    def obtener_nombre_dedo(finger):
         finger_name = ''
         if finger == Dedo.Pulgar:
             finger_name = 'Pulgar'

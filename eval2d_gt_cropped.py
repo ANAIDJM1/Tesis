@@ -85,7 +85,7 @@ for i in range(dataset.num_samples):
         print('%d / %d images Listo!: %.3f percent' % (i, dataset.num_samples, i*100.0/dataset.num_samples))
 
 mean, median, auc, _, _ = util.get_measures(0.0, 30.0, 20)
-print('Evaluation results:')
-print('Average mean EPE: %.3f pixels' % mean)
-print('Average median EPE: %.3f pixels' % median)
-print('Area under curve: %.3f' % auc)
+print('Resultados de evaluacion:')
+print('Promedio de la media EPE: %.3f pixels' % mean)
+print('Promedio de la mediana EPE: %.3f pixels' % median)
+print('Area debajo de la curva: %.3f' % auc)

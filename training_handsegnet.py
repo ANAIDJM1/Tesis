@@ -93,5 +93,5 @@ for i in range(train_para['max_iter']):
         sys.stdout.flush()
 
 
-print('Training finished. Saving final snapshot.')
+print('Entrenamiento finalizado, guardado')
 saver.save(sess, "%s/model" % train_para['snapshot_dir'], global_step=train_para['max_iter'])

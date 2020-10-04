@@ -17,7 +17,7 @@ import cv2
 from nets.ColorHandPose3DNetwork import ColorHandPose3DNetwork
 from utils.general import detect_keypoints, trafo_coords, plot_hand, plot_hand_2d, plot_hand_3d
 from pose.DeterminacionPosicion import *
-from pose.utils.EstimacionposeDedo import FingerPoseEstimate
+from pose.utils.EstimacionposeDedo import EstimacionPoseDedo
 
 def parse_args():
 	parser = argparse.ArgumentParser(description = 'Procesa los frames en un video de una pose particular')
@@ -102,11 +102,11 @@ def process_video_frame(video_frame, image_tf, threshold, save_video,
 	return video_frame
 
 def process_keypoints(keypoint_coord3d_v, threshold, known_finger_poses, output_txt_path, reqd_pose_name):
-	fingerPoseEstimate = FingerPoseEstimate(keypoint_coord3d_v)
-	fingerPoseEstimate.calculate_positions_of_fingers(print_finger_info = False)
-	obtained_positions = determine_position(fingerPoseEstimate.finger_curled, 
-										fingerPoseEstimate.finger_position, known_finger_poses,
-										threshold)
+	fingerPoseEstimate = EstimacionPoseDedo(keypoint_coord3d_v)
+	fingerPoseEstimate.calcular_posicion_dedos(print_finger_info = False)
+	obtained_positions = determinar_posicion(fingerPoseEstimate.finger_curled,
+                                             fingerPoseEstimate.finger_position, known_finger_poses,
+                                             threshold)
 
 	score_label = None
 	if len(obtained_positions) > 0:

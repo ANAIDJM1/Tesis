@@ -86,19 +86,19 @@ for i in range(dataset.num_samples):
     util.feed(keypoint_xyz21, keypoint_vis21, coord3d_pred_v)
 
     if (i % 100) == 0:
-        print('%d / %d images Listo!: %.3f percent' % (i, dataset.num_samples, i*100.0/dataset.num_samples))
+        print('%d / %d imagenes Listo!: %.3f percent' % (i, dataset.num_samples, i*100.0/dataset.num_samples))
 
 # Output results
 mean, median, auc, pck_curve_all, threshs = util.get_measures(0.0, 0.050, 20)  # rainier: Should lead to 0.764 / 9.405 / 12.210
-print('Evaluation results')
-print('Average mean EPE: %.3f mm' % (mean*1000))
-print('Average median EPE: %.3f mm' % (median*1000))
-print('Area under curve between 0mm - 50mm: %.3f' % auc)
+print('Resultados de evaluacion')
+print('Promedio medio EPE: %.3f mm' % (mean*1000))
+print('Promedio mediana EPE: %.3f mm' % (median*1000))
+print('Area debajo de la curva entre 0mm - 50mm: %.3f' % auc)
 
 # only use subset that lies in 20mm .. 50mm
 pck_curve_all, threshs = pck_curve_all[8:], threshs[8:]*1000.0
 auc_subset = calc_auc(threshs, pck_curve_all)
-print('Area under curve between 20mm - 50mm: %.3f' % auc_subset)
+print('Area debajo de la curva entre 20mm - 50mm: %.3f' % auc_subset)
 
 # Show Figure 9 from the paper
 if type(dataset) == BinaryDbReaderSTB:
@@ -111,7 +111,7 @@ if type(dataset) == BinaryDbReaderSTB:
     ax = fig.add_subplot(111)
     for t, v, name in curve_list:
         ax.plot(t, v, label=name)
-    ax.set_xlabel('threshold in mm')
+    ax.set_xlabel('Umbral en mm')
     ax.set_ylabel('PCK')
     plt.legend(loc='lower right')
     plt.show()

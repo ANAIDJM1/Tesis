@@ -11,21 +11,21 @@ class PosicionDedo(IntEnum):
     EsquinaInfIzquierda = 7
     
     @staticmethod
-    def get_finger_position_name(finger_position):
-        if finger_position == PosicionDedo.HaciaArriba:
-            finger_type = 'Hacia Arriba'
-        elif finger_position == PosicionDedo.HaciaAbajo:
-            finger_type = 'Hacia Abajo'
-        elif finger_position == PosicionDedo.ApuntaIzquierda:
-            finger_type = 'Apunta a la Izquierda'
-        elif finger_position == PosicionDedo.ApuntaDerecha:
-            finger_type = 'Apunta a la Derecha'
-        elif finger_position == PosicionDedo.EsquinaDerecha:
-            finger_type = 'Apunta a la esquina superior Derecha'
-        elif finger_position == PosicionDedo.EsquinaIzquierda:
-            finger_type = 'Apunta a la esquina superior Izquierda'
-        elif finger_position == PosicionDedo.EsquinaInfDerecha:
-            finger_type = 'Apunta a la esquina Inferior Derecha'
-        elif finger_position == PosicionDedo.EsquinaInfIzquierda:
-            finger_type = 'Apunta a la esquina Inferior Izquierda'
-        return finger_type
+    def get_nombre_posicion_dedo(posicion_dedo):
+        if posicion_dedo == PosicionDedo.HaciaArriba:
+            direccion_dedo = 'Hacia Arriba'
+        elif posicion_dedo == PosicionDedo.HaciaAbajo:
+            direccion_dedo = 'Hacia Abajo'
+        elif posicion_dedo == PosicionDedo.ApuntaIzquierda:
+            direccion_dedo = 'Apunta a la Izquierda'
+        elif posicion_dedo == PosicionDedo.ApuntaDerecha:
+            direccion_dedo = 'Apunta a la Derecha'
+        elif posicion_dedo == PosicionDedo.EsquinaDerecha:
+            direccion_dedo = 'Apunta a la esquina superior Derecha'
+        elif posicion_dedo == PosicionDedo.EsquinaIzquierda:
+            direccion_dedo = 'Apunta a la esquina superior Izquierda'
+        elif posicion_dedo == PosicionDedo.EsquinaInfDerecha:
+            direccion_dedo = 'Apunta a la esquina Inferior Derecha'
+        elif posicion_dedo == PosicionDedo.EsquinaInfIzquierda:
+            direccion_dedo = 'Apunta a la esquina Inferior Izquierda'
+        return direccion_dedo

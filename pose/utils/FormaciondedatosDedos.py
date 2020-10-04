@@ -1,8 +1,8 @@
-class FingerDataFormation:
+class DataFormacionDedo:
     def __init__(self):
-        self.curl_position = []
-        self.finger_position = []
-        self.curl_position_confidence = []
-        self.finger_position_confidence = []
-        self.position_name = ''
-        self.position_id = -1
+        self.curva_posicion = []
+        self.dedo_posicion = []
+        self.curva_posicion_determinacion = []
+        self.determinacion_posicion_dedo = []
+        self.nombre_posicion = ''
+        self.posicion_id = -1

@@ -81,7 +81,7 @@ if not os.path.exists(train_para['snapshot_dir']):
     print('Created snapshot dir:', train_para['snapshot_dir'])
 
 # Training loop
-print('Starting to train ...')
+print('Empezando a entrenar...')
 for i in range(train_para['max_iter']):
     _, loss_v = sess.run([train_op, loss])
 
@@ -95,5 +95,5 @@ for i in range(train_para['max_iter']):
         sys.stdout.flush()
 
 
-print('Training finished. Saving final snapshot.')
+print('Entrenamiento finalizado. Se guardo la captura final')
 saver.save(sess, "%s/model" % train_para['snapshot_dir'], global_step=train_para['max_iter'])

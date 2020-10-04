@@ -30,7 +30,7 @@ if __name__ == '__main__':
     # images to be shown
     image_list = list()
 
-    """" DATASET3
+    """" DATASET3 """
     image_list.append('./data/dataset3/a.jpg')
     image_list.append('./data/dataset3/b.jpg')
     image_list.append('./data/dataset3/c.jpg')
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     image_list.append('./data/dataset3/v.jpg')
     image_list.append('./data/dataset3/w.jpg')
     image_list.append('./data/dataset3/x.jpg')
-    image_list.append('./data/dataset3/y.jpg')"""
+    image_list.append('./data/dataset3/y.jpg')
 
     """         DATASET1
     image_list.append('./data/dataset1/d.jpg')
@@ -65,12 +65,12 @@ if __name__ == '__main__':
     image_list.append('./data/dataset1/v.jpg')
     image_list.append('./data/dataset1/x.jpg')"""
 
-    """DATASET 2"""
+    """DATASET 2
     image_list.append('./data/dataset2/d.jpg')
     image_list.append('./data/dataset2/k.jpg')
     image_list.append('./data/dataset2/l.jpg')
     image_list.append('./data/dataset2/v.jpg')
-    image_list.append('./data/dataset2/x.jpg')
+    image_list.append('./data/dataset2/x.jpg')"""
 
 
 

@@ -1,5 +1,4 @@
 import numpy as np
-
 from sklearn.utils import shuffle
 from math import ceil
 
@@ -8,10 +7,12 @@ def read_data_files(data_files, limit_data_count):
     # Se etiquetará según la entrada en la lista
     # limit_data_count: límite superior de la cantidad de entradas permitidas para cada tipo.
     X_data, y_data = None, None
-    for label_index, data_file in enumerate(data_files):
+    for  label_index, data_file in enumerate(data_files):
         data = np.genfromtxt(data_file, delimiter = ',')
+        #muestra el tipo de array numpy de cada letra muestra su unidimensionalidad
+        print(data.shape)
         data = data[:limit_data_count, :]
-        print(data.dtype)
+
         labels = [label_index] * data.shape[0]
         if X_data is None:
             X_data = data

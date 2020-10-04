@@ -6,12 +6,12 @@ class CurvaDeDedo(IntEnum):
     FullCurva = 2
     
     @staticmethod
-    def get_finger_curled_name(finger_curled):
-        finger_curled_name = ''
-        if finger_curled == CurvaDeDedo.NoCurva:
-            finger_curled_name = 'No Curva'
-        elif finger_curled == CurvaDeDedo.MediaCurva:
-            finger_curled_name = 'Medio Curveado'
-        elif finger_curled == CurvaDeDedo.FullCurva:
-            finger_curled_name = 'Full Curva'
-        return finger_curled_name
+    def get_nombre_curvatura_dedo(curvatura_dedo):
+        nombre_curvatura_dedo = ''
+        if curvatura_dedo == CurvaDeDedo.NoCurva:
+            nombre_curvatura_dedo = 'No Curva'
+        elif curvatura_dedo == CurvaDeDedo.MediaCurva:
+            nombre_curvatura_dedo = 'Medio Curveado'
+        elif curvatura_dedo == CurvaDeDedo.FullCurva:
+            nombre_curvatura_dedo = 'Full Curva'
+        return nombre_curvatura_dedo

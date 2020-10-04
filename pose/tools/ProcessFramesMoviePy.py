@@ -15,13 +15,12 @@ from moviepy.editor import VideoFileClip
 from nets.ColorHandPose3DNetwork import ColorHandPose3DNetwork
 from utils.general import detect_keypoints, trafo_coords, plot_hand, plot_hand_2d, plot_hand_3d
 from pose.DeterminacionPosicion import *
-from pose.utils.EstimacionposeDedo import FingerPoseEstimate
+from pose.utils.EstimacionposeDedo import EstimacionPoseDedo
 
-# Variables to be used
-# TODO: Check how to pass parameters through fl_image function. Remove global variables
+# Variables a usar
 image_tf = None
 threshold = None
-known_finger_poses = None
+poses_dedo_conocidas = None
 network_elements = None
 output_txt_path = None
 reqd_pose_name = None
@@ -102,11 +101,11 @@ def process_video_frame(video_frame):
 	return video_frame
 
 def process_keypoints(keypoint_coord3d_v):
-	fingerPoseEstimate = FingerPoseEstimate(keypoint_coord3d_v)
-	fingerPoseEstimate.calculate_positions_of_fingers(print_finger_info = False)
-	obtained_positions = determine_position(fingerPoseEstimate.finger_curled, 
-										fingerPoseEstimate.finger_position, known_finger_poses,
-										threshold)
+	fingerPoseEstimate = EstimacionPoseDedo(keypoint_coord3d_v)
+	fingerPoseEstimate.calcular_posicion_dedos(print_finger_info = False)
+	obtained_positions = determinar_posicion(fingerPoseEstimate.finger_curled,
+											 fingerPoseEstimate.finger_position, poses_dedo_conocidas,
+											 threshold)
 
 	score_label = None
 	if len(obtained_positions) > 0:
@@ -124,8 +123,8 @@ if __name__ == '__main__':
 	args = parse_args()
 	threshold = args.threshold * 10
 	video_path, output_txt_path, output_video_path = prepare_paths(args.video_path, args.output_path)
-	known_finger_poses = create_known_finger_poses()
-	reqd_pose_name = get_position_name_with_pose_id(args.pose_no, known_finger_poses)
+	poses_dedo_conocidas = create_known_finger_poses()
+	reqd_pose_name = get_position_name_with_pose_id(args.pose_no, poses_dedo_conocidas)
 								
 	sess, image_tf, keypoint_coord3d_tf, scale_tf, center_tf, keypoints_scoremap_tf = prepare_network()
 	network_elements = [keypoint_coord3d_tf, scale_tf, center_tf, keypoints_scoremap_tf]

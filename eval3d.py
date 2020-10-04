@@ -99,7 +99,7 @@ for i in range(dataset.num_samples):
 
 # Output results
 mean, median, auc, _, _ = util.get_measures(0.0, 0.050, 20)
-print('Evaluation results for %s:' % VARIANT)
-print('Average mean EPE: %.3f mm' % (mean*1000))
-print('Average median EPE: %.3f mm' % (median*1000))
-print('Area under curve: %.3f' % auc)
+print('Resultados de la evaluacion para %s:' % VARIANT)
+print('Promedio de la media EPE: %.3f mm' % (mean*1000))
+print('Promedio de la mediana EPE: %.3f mm' % (median*1000))
+print('Area debajo de la curva: %.3f' % auc)

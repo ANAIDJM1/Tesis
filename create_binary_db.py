@@ -115,4 +115,4 @@ with open(file_name_out, 'wb') as fo:
         write_to_binary(fo, image, mask, kp_coord_xyz, kp_coord_uv, kp_visible, camera_intrinsic_matrix)
 
         if (sample_id % 100) == 0:
-            print('%d / %d images Listo!: %.3f percent' % (sample_id, num_samples, sample_id*100.0/num_samples))
+            print('%d / %d imagenes Listo!: %.3f percent' % (sample_id, num_samples, sample_id*100.0/num_samples))

@@ -15,12 +15,13 @@ from pose.training.ReadData import read_data_files, split_data
 
 N_KEYPOINTS = 63
 
+
 def parse_args():
 	parser = argparse.ArgumentParser(description = 'Entrenamiento de la red neuronal')
 	#Se tiene q dar individuales cvs basados en el orden de la poscicion hechos en el
-	# determinacionposicion
+	# determinacionposicion.py
 
-	parser.add_argument('csv_files', help = 'Coma separa los archivos cvs y origines (ruta) de donde se'
+	parser.add_argument('csv_files', help = 'La coma separa los archivos cvs y origines (ruta) de donde se'
 											' encuentra', type = str)
 	parser.add_argument('--output-path', dest = 'output_path', type = str, default = None,
 						help = 'ruta del folder donde se almacenan los modelos entrenados')
@@ -32,7 +33,7 @@ def parse_args():
 						help = 'Numero de tiempos para entrenar la data')
 	parser.add_argument('--batch-size', dest = 'batch_size', type = int, default = 64,
 						help = 'Tamaño de lote durante el entrenamiento')
-	parser.add_argument('--max-samples', dest = 'max_samples', type = int, default = 800,
+	parser.add_argument('--max-samples', dest = 'max_samples', type = int, default = 1600,
 						help = 'Número máximo de muestras por clase permitido')
 	parser.add_argument('--break-training-at', dest = 'break_training_at', default = 0.96, type = float,
 					    help = 'Salga del entrenamiento cuando la precisión de la prueba aumente más')
@@ -108,11 +109,11 @@ def build_and_train_network(train_data, test_data, parameters, output_at):
 			train_accuracies.append(train_acc)
 			test_accuracies.append(test_acc)
 			
-			print('Epoch: {}'.format(epoch_no + 1))
-			print('Train accuracy: {:.3f}, Test accuracy: {:.3f}'.format(train_acc, test_acc))
+			print('Periodo: {}'.format(epoch_no + 1))
+			print('Exactitud de entrenamiento: {:.3f},Exactitud de Test: {:.3f}'.format(train_acc, test_acc))
 
 			if test_acc >= parameters['break_training_at']:
-				print('Breaking out of training')
+				print('Rompe el entrenamiento')
 				break
 		
 		shutil.rmtree(output_at, ignore_errors = True)
@@ -152,7 +153,7 @@ def export_created_graph(output_at):
 
 		graph_def = g.as_graph_def()
 		tf.train.write_graph(graph_def, output_at, 'graph.pb', as_text = False)
-		print('Saved model')
+		print('Modelo guardado')
 
 
 if __name__ == '__main__':
@@ -162,15 +163,16 @@ if __name__ == '__main__':
 	X_data, y_data = read_data_files(data_files, args.max_samples)
 	train_data, test_data = split_data(X_data, y_data, args.train_test_split)
 	
-	# Keep adding parameters here
+	# Sigue agregando parámetros aquí
 	parameters = {'batch_size': args.batch_size,
 	              'epochs': args.epochs,
 				  'learning_rate': args.learning_rate,
 				  'n_classes': len(data_files),
 				  'break_training_at': args.break_training_at}
 	
-	# If output folder is None, will create an output folder
-	# Also, the output folder will be deleted and recreated again.
+	# Si no hay salida de folder, creara un folder de salida
+	# Ademas, la salida del folder se borrara y se creara nuevamente
+
 	output_at = 'Checkpoint' if args.output_path is None else args.output_path
 
 	build_and_train_network(train_data, test_data, parameters, output_at)

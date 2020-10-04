@@ -1,784 +1,784 @@
 from pose.utils.CurvaDedo import CurvaDeDedo
 from pose.utils.PosicionDedo import PosicionDedo
-from pose.utils.FormaciondedatosDedos import FingerDataFormation
+from pose.utils.FormaciondedatosDedos import DataFormacionDedo
 
 
-def determine_position(curled_positions, finger_positions, known_finger_poses, min_threshold):
-    obtained_positions = {}
+def determinar_posicion(posiciones_curvatura, posiciones_dedo, posiciones_dedo_conocidas, min_threshold):
+    posicion_obtenida = {}
 
-    for finger_pose in known_finger_poses:
+    for pose_dedo in posiciones_dedo_conocidas:
         score_at = 0.0
-        for known_curl, known_curl_confidence, given_curl in \
-                zip(finger_pose.curl_position, finger_pose.curl_position_confidence, curled_positions):
-            if len(known_curl) == 0:
-                if len(known_curl_confidence) == 1:
-                    score_at += known_curl_confidence[0]
+        for curva_conocida, determinacion_curva_conocida, curva_dada in \
+                zip(pose_dedo.curva_posicion, pose_dedo.curva_posicion_determinacion, posiciones_curvatura):
+            if len(curva_conocida) == 0:
+                if len(determinacion_curva_conocida) == 1:
+                    score_at += determinacion_curva_conocida[0]
                     continue
 
-            if given_curl in known_curl:
-                confidence_at = known_curl.index(given_curl)
-                score_at += known_curl_confidence[confidence_at]
+            if curva_dada in curva_conocida:
+                confidence_at = curva_conocida.index(curva_dada)
+                score_at += determinacion_curva_conocida[confidence_at]
 
-        for known_position, known_position_confidence, given_position in \
-                zip(finger_pose.finger_position, finger_pose.finger_position_confidence, finger_positions):
-            if len(known_position) == 0:
-                if len(known_position_confidence) == 1:
-                    score_at += known_position_confidence[0]
+        for posicion_conocida, determinacion_pose_conocida, pose_dada in \
+                zip(pose_dedo.dedo_posicion, pose_dedo.determinacion_posicion_dedo, posiciones_dedo):
+            if len(posicion_conocida) == 0:
+                if len(determinacion_pose_conocida) == 1:
+                    score_at += determinacion_pose_conocida[0]
                     continue
 
-            if given_position in known_position:
-                confidence_at = known_position.index(given_position)
-                score_at += known_position_confidence[confidence_at]
+            if pose_dada in posicion_conocida:
+                confidence_at = posicion_conocida.index(pose_dada)
+                score_at += determinacion_pose_conocida[confidence_at]
 
         if score_at >= min_threshold:
-            obtained_positions[finger_pose.position_name] = score_at
+            posicion_obtenida[pose_dedo.nombre_posicion] = score_at
 
-    return obtained_positions
+    return posicion_obtenida
 
 
-def get_position_name_with_pose_id(pose_id, finger_poses):
-    for finger_pose in finger_poses:
-        if finger_pose.position_id == pose_id:
-            return finger_pose.position_name
+def get_position_name_with_pose_id(pose_id, poses_dedo):
+    for pose_dedo in poses_dedo:
+        if pose_dedo.posicion_id == pose_id:
+            return pose_dedo.nombre_posicion
     return None
 
 
 def create_known_finger_poses():
-    known_finger_poses = []
+    poses_dedo_conocidas = []
 
     #LETRAS DEL ABECEDARIO EXCEPTUANDO LA "J" Y LA "Z"
     ####### A id =0
-    letra_a = FingerDataFormation()
-    letra_a.position_name = 'A'
-    letra_a.curl_position = [
+    letra_a = DataFormacionDedo()
+    letra_a.nombre_posicion = 'A'
+    letra_a.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.FullCurva],  # Index
         [CurvaDeDedo.FullCurva],  # Medio
         [CurvaDeDedo.FullCurva],  # Anular
         [CurvaDeDedo.FullCurva]  # Menhique
     ]
-    letra_a.curl_position_confidence = [
+    letra_a.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_a.finger_position = [
+    letra_a.dedo_posicion = [
         [PosicionDedo.EsquinaIzquierda, PosicionDedo.HaciaArriba],  # Pulgar
         [PosicionDedo.HaciaArriba],  # Index
         [PosicionDedo.HaciaArriba],  # Medio
         [PosicionDedo.HaciaArriba],  # Anular
         [PosicionDedo.HaciaArriba]  # Menhique
     ]
-    letra_a.finger_position_confidence = [
+    letra_a.determinacion_posicion_dedo = [
         [1.0,0.5],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_a.position_id = 0
-    known_finger_poses.append(letra_a)
+    letra_a.posicion_id = 0
+    poses_dedo_conocidas.append(letra_a)
 
     ####### B id =1
-    letra_b = FingerDataFormation()
-    letra_b.position_name = 'B'
-    letra_b.curl_position = [
+    letra_b = DataFormacionDedo()
+    letra_b.nombre_posicion = 'B'
+    letra_b.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.NoCurva],  # Anular
         [CurvaDeDedo.NoCurva]  # Menhique
     ]
-    letra_b.curl_position_confidence = [
+    letra_b.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_b.finger_position = [
+    letra_b.dedo_posicion = [
         [PosicionDedo.EsquinaDerecha, PosicionDedo.HaciaArriba],  # Pulgar
         [PosicionDedo.HaciaArriba],  # Index
         [PosicionDedo.HaciaArriba],  # Medio
         [PosicionDedo.HaciaArriba],  # Anular
         [PosicionDedo.HaciaArriba]  # Menhique
     ]
-    letra_b.finger_position_confidence = [
+    letra_b.determinacion_posicion_dedo = [
         [1.0, 1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_b.position_id = 1
-    known_finger_poses.append(letra_b)
+    letra_b.posicion_id = 1
+    poses_dedo_conocidas.append(letra_b)
 
     ####### C id =2
-    letra_c = FingerDataFormation()
-    letra_c.position_name = 'C'
-    letra_c.curl_position = [
+    letra_c = DataFormacionDedo()
+    letra_c.nombre_posicion = 'C'
+    letra_c.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.NoCurva],  # Anular
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.NoCurva]  # Menhique
     ]
-    letra_c.curl_position_confidence = [
+    letra_c.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0, 1.0],  # Index
         [1.0, 1.0],  # Medio
         [1.0, 1.0],  # Anular
         [1.0, 1.0]  # Menhique
     ]
-    letra_c.finger_position = [
+    letra_c.dedo_posicion = [
         [PosicionDedo.ApuntaIzquierda],  # Pulgar
         [PosicionDedo.ApuntaIzquierda],  # Index
         [PosicionDedo.ApuntaIzquierda],  # Medio
         [PosicionDedo.ApuntaIzquierda, PosicionDedo.EsquinaIzquierda],  # Anular
         [PosicionDedo.ApuntaIzquierda, PosicionDedo.EsquinaIzquierda]  # Menhique
     ]
-    letra_c.finger_position_confidence = [
+    letra_c.determinacion_posicion_dedo = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0, 1.0],  # Anular
         [1.0, 1.0]  # Menhique
     ]
-    letra_c.position_id = 2
-    known_finger_poses.append(letra_c)
+    letra_c.posicion_id = 2
+    poses_dedo_conocidas.append(letra_c)
 
     ####### D id =3
-    letra_d = FingerDataFormation()
-    letra_d.position_name = 'D'
-    letra_d.curl_position = [
+    letra_d = DataFormacionDedo()
+    letra_d.nombre_posicion = 'D'
+    letra_d.curva_posicion = [
         [CurvaDeDedo.NoCurva,CurvaDeDedo.MediaCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.FullCurva],  # Medio
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.FullCurva],  # Anular
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.FullCurva]  # Menhique
     ]
-    letra_d.curl_position_confidence = [
+    letra_d.curva_posicion_determinacion = [
         [1.0,0.5],  # Pulgar
         [1.0],  # Index
         [1.0, 0.3],  # Medio
         [1.0, 0.3],  # Anular
         [1.0, 0.3]  # Menhique
     ]
-    letra_d.finger_position = [
+    letra_d.dedo_posicion = [
         [PosicionDedo.EsquinaIzquierda],  # Pulgar
         [PosicionDedo.HaciaArriba],  # Index
         [PosicionDedo.ApuntaIzquierda ,PosicionDedo.EsquinaInfIzquierda],  # Medio
         [PosicionDedo.ApuntaIzquierda ,PosicionDedo.EsquinaInfIzquierda],  # Anular
         [PosicionDedo.ApuntaIzquierda ,PosicionDedo.EsquinaInfIzquierda]  # Menhique
     ]
-    letra_d.finger_position_confidence = [
+    letra_d.determinacion_posicion_dedo = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_d.position_id = 3
-    known_finger_poses.append(letra_d)
+    letra_d.posicion_id = 3
+    poses_dedo_conocidas.append(letra_d)
 
     ####### E id =4
-    letra_e = FingerDataFormation()
-    letra_e.position_name = 'E'
-    letra_e.curl_position = [
+    letra_e = DataFormacionDedo()
+    letra_e.nombre_posicion = 'E'
+    letra_e.curva_posicion = [
         [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva],#Pulgar
         [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva],  # Index
         [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva],  # Medio
         [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva],  # Anular
         [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva]   # Menhique
     ]
-    letra_e.curl_position_confidence = [
+    letra_e.curva_posicion_determinacion = [
         [1.0,0.5],  # Pulgar
         [1.0,0.5],  # Index
         [1.0,0.5],  # Medio
         [1.0,0.5],  # Anular
         [1.0,0.5]  # Menhique
     ]
-    letra_e.finger_position = [
+    letra_e.dedo_posicion = [
         [PosicionDedo.HaciaArriba,PosicionDedo.ApuntaDerecha],  # Pulgar
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.HaciaArriba],  # Index
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaIzquierda],  # Medio
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaIzquierda],  # Anular
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaIzquierda]  # Menhique
     ]
-    letra_e.finger_position_confidence = [
+    letra_e.determinacion_posicion_dedo = [
         [1.0,0.5],  # Pulgar
         [1.0,0.5],  # Index
         [1.0,0.5],  # Medio
         [1.0,0.5],  # Anular
         [1.0,0.5]  # Menhique
     ]
-    letra_e.position_id = 4
-    known_finger_poses.append(letra_e)
+    letra_e.posicion_id = 4
+    poses_dedo_conocidas.append(letra_e)
 
     ####### F id =5
-    letra_f = FingerDataFormation()
-    letra_f.position_name = 'F'
-    letra_f.curl_position = [
+    letra_f = DataFormacionDedo()
+    letra_f.nombre_posicion = 'F'
+    letra_f.curva_posicion = [
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva],  # Pulgar
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.NoCurva],  # Anular
         [CurvaDeDedo.NoCurva]  # Menhique
     ]
-    letra_f.curl_position_confidence = [
+    letra_f.curva_posicion_determinacion = [
         [1.0,1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_f.finger_position = [
+    letra_f.dedo_posicion = [
         [PosicionDedo.EsquinaIzquierda],  # Pulgar
         [PosicionDedo.HaciaArriba],  # Index
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha],  # Medio
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha],  # Anular
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha]  # Menhique
     ]
-    letra_f.finger_position_confidence = [
+    letra_f.determinacion_posicion_dedo = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [0.5,1.0],  # Medio
         [0.5,1.0],  # Anular
         [0.5,1.0]  # Menhique
     ]
-    letra_f.position_id = 5
-    known_finger_poses.append(letra_f)
+    letra_f.posicion_id = 5
+    poses_dedo_conocidas.append(letra_f)
 
     ####### G id =6
-    letra_g = FingerDataFormation()
-    letra_g.position_name = 'G'
-    letra_g.curl_position = [
+    letra_g = DataFormacionDedo()
+    letra_g.nombre_posicion = 'G'
+    letra_g.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.FullCurva],  # Medio
         [CurvaDeDedo.FullCurva],  # Anular
         [CurvaDeDedo.FullCurva]  # Menhique
     ]
-    letra_g.curl_position_confidence = [
+    letra_g.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_g.finger_position = [
+    letra_g.dedo_posicion = [
         [PosicionDedo.HaciaArriba, PosicionDedo.ApuntaIzquierda],  # Pulgar
         [PosicionDedo.HaciaArriba, PosicionDedo.ApuntaIzquierda],  # Index
         [PosicionDedo.EsquinaIzquierda],  # Medio
         [PosicionDedo.EsquinaIzquierda],  # Anular
         [PosicionDedo.ApuntaIzquierda]  # Menhique
     ]
-    letra_g.finger_position_confidence = [
+    letra_g.determinacion_posicion_dedo = [
         [1.0, 1.0],  # Pulgar
         [1.0, 1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_g.position_id = 6
-    known_finger_poses.append(letra_g)
+    letra_g.posicion_id = 6
+    poses_dedo_conocidas.append(letra_g)
 
     ####### H id =7
-    letra_h = FingerDataFormation()
-    letra_h.position_name = 'H'
-    letra_h.curl_position = [
+    letra_h = DataFormacionDedo()
+    letra_h.nombre_posicion = 'H'
+    letra_h.curva_posicion = [
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva],  # Anular
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva]  # Menhique
     ]
-    letra_h.curl_position_confidence = [
+    letra_h.curva_posicion_determinacion = [
         [1.0,1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [0.8,1.0],  # Anular
         [0.8,1.0]  # Menhique
     ]
-    letra_h.finger_position = [
+    letra_h.dedo_posicion = [
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.ApuntaIzquierda],  # Pulgar
         [PosicionDedo.ApuntaIzquierda,PosicionDedo.EsquinaIzquierda],  # Index
         [PosicionDedo.ApuntaIzquierda,PosicionDedo.EsquinaIzquierda],  # Medio
         [PosicionDedo.ApuntaIzquierda,PosicionDedo.EsquinaIzquierda],  # Anular
         [PosicionDedo.ApuntaIzquierda,PosicionDedo.EsquinaIzquierda]  # Menhique
     ]
-    letra_h.finger_position_confidence = [
+    letra_h.determinacion_posicion_dedo = [
         [1.0,1.0],  # Pulgar
         [0.8,1.0],  # Index
         [0.8,1.0],  # Medio
         [0.8,1.0],  # Anular
         [0.8,1.0]  # Menhique
     ]
-    letra_h.position_id = 7
-    known_finger_poses.append(letra_h)
+    letra_h.posicion_id = 7
+    poses_dedo_conocidas.append(letra_h)
 
     ####### I id =8
-    letra_i = FingerDataFormation()
-    letra_i.position_name = 'I'
-    letra_i.curl_position = [
+    letra_i = DataFormacionDedo()
+    letra_i.nombre_posicion = 'I'
+    letra_i.curva_posicion = [
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.FullCurva],  # Index
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.FullCurva],  # Medio
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.FullCurva],  # Anular
         [CurvaDeDedo.NoCurva]  # Menhique
     ]
-    letra_i.curl_position_confidence = [
+    letra_i.curva_posicion_determinacion = [
         [1.0,1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_i.finger_position = [
+    letra_i.dedo_posicion = [
         [PosicionDedo.EsquinaIzquierda],  # Pulgar
         [PosicionDedo.ApuntaIzquierda, PosicionDedo.EsquinaIzquierda],  # Index
         [PosicionDedo.ApuntaIzquierda, PosicionDedo.EsquinaIzquierda],  # Medio
         [PosicionDedo.ApuntaIzquierda, PosicionDedo.EsquinaIzquierda],  # Anular
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaDerecha]  # Menhique
     ]
-    letra_i.finger_position_confidence = [
+    letra_i.determinacion_posicion_dedo = [
         [1.0],  # Pulgar
         [1.0, 1.0],  # Index
         [1.0, 1.0],  # Medio
         [1.0, 1.0],  # Anular
         [1.0,0.25]  # Menhique
     ]
-    letra_i.position_id = 8
-    known_finger_poses.append(letra_i)
+    letra_i.posicion_id = 8
+    poses_dedo_conocidas.append(letra_i)
 
     ####### k id =9
-    letra_k = FingerDataFormation()
-    letra_k.position_name = 'K'
-    letra_k.curl_position = [
+    letra_k = DataFormacionDedo()
+    letra_k.nombre_posicion = 'K'
+    letra_k.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Menhique
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.FullCurva],  # Medio
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.FullCurva]  # Anular
     ]
-    letra_k.curl_position_confidence = [
+    letra_k.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_k.finger_position = [
+    letra_k.dedo_posicion = [
         [PosicionDedo.HaciaArriba],  # Pulgar
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.ApuntaIzquierda],  # Index
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.ApuntaIzquierda],  # Medio
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.EsquinaInfIzquierda],  # Anular
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.EsquinaInfIzquierda]  # Menhique
     ]
-    letra_k.finger_position_confidence = [
+    letra_k.determinacion_posicion_dedo = [
         [1.0],  # Pulgar
         [1.0,0.5],  # Index
         [1.0,1.0],  # Medio
         [1.0,0.8],  # Anular
         [1.0,0.8]  # Menhique
     ]
-    letra_k.position_id = 9
-    known_finger_poses.append(letra_k)
+    letra_k.posicion_id = 9
+    poses_dedo_conocidas.append(letra_k)
 
     ####### L id =10
-    letra_l = FingerDataFormation()
-    letra_l.position_name = 'L'
-    letra_l.curl_position = [
+    letra_l = DataFormacionDedo()
+    letra_l.nombre_posicion = 'L'
+    letra_l.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.FullCurva],  # Medio
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.FullCurva],  # Anular
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.FullCurva]  # Menhique
     ]
-    letra_l.curl_position_confidence = [
+    letra_l.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0,0.5],  # Medio
         [1.0,0.5],  # Anular
         [1.0,0.5]  # Menhique
     ]
-    letra_l.finger_position = [
+    letra_l.dedo_posicion = [
         [PosicionDedo.EsquinaIzquierda, PosicionDedo.ApuntaIzquierda],  # Pulgar
         [PosicionDedo.EsquinaDerecha,PosicionDedo.HaciaArriba],  # Index
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.HaciaArriba],  # Medio
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.HaciaArriba],  # Anular
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.HaciaArriba]  # Menhique
     ]
-    letra_l.finger_position_confidence = [
+    letra_l.determinacion_posicion_dedo = [
         [1.0,1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_l.position_id = 10
-    known_finger_poses.append(letra_l)
+    letra_l.posicion_id = 10
+    poses_dedo_conocidas.append(letra_l)
 
     ####### M id =11
-    letra_m = FingerDataFormation()
-    letra_m.position_name = 'M'
-    letra_m.curl_position = [
+    letra_m = DataFormacionDedo()
+    letra_m.nombre_posicion = 'M'
+    letra_m.curva_posicion = [
         [CurvaDeDedo.FullCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.NoCurva],  # Anular
         [CurvaDeDedo.FullCurva]  # Menhique
     ]
-    letra_m.curl_position_confidence = [
+    letra_m.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_m.finger_position = [
+    letra_m.dedo_posicion = [
         [PosicionDedo.HaciaAbajo, PosicionDedo.EsquinaInfDerecha],  # Pulgar
         [PosicionDedo.HaciaAbajo],  # Index
         [PosicionDedo.HaciaAbajo],  # Medio
         [PosicionDedo.HaciaAbajo],  # Anular
         [PosicionDedo.EsquinaInfIzquierda, PosicionDedo.HaciaAbajo]  # Menhique
     ]
-    letra_m.finger_position_confidence = [
+    letra_m.determinacion_posicion_dedo = [
         [1.0, 1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0, 1.0]  # Menhique
     ]
-    letra_m.position_id = 11
-    known_finger_poses.append(letra_m)
+    letra_m.posicion_id = 11
+    poses_dedo_conocidas.append(letra_m)
 
     ####### N id =12
-    letra_n = FingerDataFormation()
-    letra_n.position_name = 'N'
-    letra_n.curl_position = [
+    letra_n = DataFormacionDedo()
+    letra_n.nombre_posicion = 'N'
+    letra_n.curva_posicion = [
         [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva],  # Anular
         [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva]  # Menhique
     ]
-    letra_n.curl_position_confidence = [
+    letra_n.curva_posicion_determinacion = [
         [1.0,1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_n.finger_position = [
+    letra_n.dedo_posicion = [
         [PosicionDedo.HaciaAbajo, PosicionDedo.EsquinaInfDerecha],  # Pulgar
         [PosicionDedo.HaciaAbajo],  # Index
         [PosicionDedo.HaciaAbajo],  # Medio
         [PosicionDedo.HaciaAbajo, PosicionDedo.EsquinaIzquierda],  # Anular
         [PosicionDedo.HaciaAbajo, PosicionDedo.EsquinaIzquierda]  # Menhique
     ]
-    letra_n.finger_position_confidence = [
+    letra_n.determinacion_posicion_dedo = [
         [1.0,1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0,0.8],  # Anular
         [1.0,0.8]  # Menhique
     ]
-    letra_n.position_id = 12
-    known_finger_poses.append(letra_n)
+    letra_n.posicion_id = 12
+    poses_dedo_conocidas.append(letra_n)
 
     ####### O id =13
-    letra_o = FingerDataFormation()
-    letra_o.position_name = 'O'
-    letra_o.curl_position = [
+    letra_o = DataFormacionDedo()
+    letra_o.nombre_posicion = 'O'
+    letra_o.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.MediaCurva],  # Index
         [CurvaDeDedo.MediaCurva],  # Medio
         [CurvaDeDedo.MediaCurva],  # Anular
         [CurvaDeDedo.NoCurva]  # Menhique
     ]
-    letra_o.curl_position_confidence = [
+    letra_o.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_o.finger_position = [
+    letra_o.dedo_posicion = [
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaIzquierda],  # Pulgar
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaIzquierda],  # Index
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaIzquierda],  # Medio
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaIzquierda],  # Anular
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaIzquierda]  # Menhique
     ]
-    letra_o.finger_position_confidence = [
+    letra_o.determinacion_posicion_dedo = [
         [1.0, 1.0],  # Pulgar
         [1.0, 1.0],  # Index
         [1.0, 1.0],  # Medio
         [1.0, 1.0],  # Anular
         [1.0, 1.0]  # Menhique
     ]
-    letra_o.position_id = 13
-    known_finger_poses.append(letra_o)
+    letra_o.posicion_id = 13
+    poses_dedo_conocidas.append(letra_o)
 
     ####### P id =14
-    letra_p = FingerDataFormation()
-    letra_p.position_name = 'P'
-    letra_p.curl_position = [
+    letra_p = DataFormacionDedo()
+    letra_p.nombre_posicion = 'P'
+    letra_p.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.NoCurva],  # Anular
         [CurvaDeDedo.NoCurva,CurvaDeDedo.MediaCurva]  # Menhique
     ]
-    letra_p.curl_position_confidence = [
+    letra_p.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0,1.0 ] # Menhique
     ]
-    letra_p.finger_position = [
+    letra_p.dedo_posicion = [
         [PosicionDedo.HaciaAbajo,PosicionDedo.EsquinaInfDerecha],  # Pulgar
         [PosicionDedo.HaciaAbajo,PosicionDedo.EsquinaInfIzquierda],  # Index
         [PosicionDedo.HaciaAbajo,PosicionDedo.EsquinaInfIzquierda],  # Medio
         [PosicionDedo.HaciaAbajo,PosicionDedo.EsquinaInfDerecha],  # Anular
         [PosicionDedo.HaciaAbajo,PosicionDedo.EsquinaInfDerecha]  # Menhique
     ]
-    letra_p.finger_position_confidence = [
+    letra_p.determinacion_posicion_dedo = [
         [1.0, 1.0],  # Pulgar
         [1.0, 1.0],  # Index
         [1.0, 1.0],  # Medio
         [1.0, 1.0],  # Anular
         [1.0, 1.0]  # Menhique
     ]
-    letra_p.position_id = 14
-    known_finger_poses.append(letra_p)
+    letra_p.posicion_id = 14
+    poses_dedo_conocidas.append(letra_p)
 
     ####### Q id =15
-    letra_q = FingerDataFormation()
-    letra_q.position_name = 'Q'
-    letra_q.curl_position = [
+    letra_q = DataFormacionDedo()
+    letra_q.nombre_posicion = 'Q'
+    letra_q.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.NoCurva, CurvaDeDedo.MediaCurva],  # Index
         [CurvaDeDedo.MediaCurva],  # Medio
         [CurvaDeDedo.MediaCurva],  # Anular
         [CurvaDeDedo.MediaCurva]  # Menhique
     ]
-    letra_q.curl_position_confidence = [
+    letra_q.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0, 1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_q.finger_position = [
+    letra_q.dedo_posicion = [
         [PosicionDedo.HaciaAbajo, PosicionDedo.EsquinaInfIzquierda],  # Pulgar
         [PosicionDedo.HaciaAbajo, PosicionDedo.EsquinaInfIzquierda],  # Index
         [PosicionDedo.HaciaAbajo, PosicionDedo.ApuntaDerecha],  # Medio
         [PosicionDedo.HaciaAbajo, PosicionDedo.ApuntaDerecha],  # Anular
         [PosicionDedo.HaciaAbajo, PosicionDedo.ApuntaDerecha]  # Menhique
     ]
-    letra_q.finger_position_confidence = [
+    letra_q.determinacion_posicion_dedo = [
         [1.0, 1.0],  # Pulgar
         [1.0, 1.0],  # Index
         [1.0, 1.0],  # Medio
         [1.0, 1.0],  # Anular
         [1.0, 1.0]  # Menhique
     ]
-    letra_q.position_id = 15
-    known_finger_poses.append(letra_q)
+    letra_q.posicion_id = 15
+    poses_dedo_conocidas.append(letra_q)
 
     ####### R id =16
-    letra_r = FingerDataFormation()
-    letra_r.position_name = 'R'
-    letra_r.curl_position = [
+    letra_r = DataFormacionDedo()
+    letra_r.nombre_posicion = 'R'
+    letra_r.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.NoCurva, CurvaDeDedo.MediaCurva],  # Anular
         [CurvaDeDedo.NoCurva, CurvaDeDedo.MediaCurva]  # Menhique
     ]
-    letra_r.curl_position_confidence = [
+    letra_r.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_r.finger_position = [
+    letra_r.dedo_posicion = [
         [PosicionDedo.EsquinaDerecha, PosicionDedo.HaciaArriba],  # Pulgar
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaDerecha],  # Index
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaIzquierda],  # Medio
         [PosicionDedo.EsquinaInfIzquierda,PosicionDedo.HaciaArriba],  # Anular
         [PosicionDedo.EsquinaInfIzquierda,PosicionDedo.HaciaArriba]  # Menhique
     ]
-    letra_r.finger_position_confidence = [
+    letra_r.determinacion_posicion_dedo = [
         [1.0,1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_r.position_id = 16
-    known_finger_poses.append(letra_r)
+    letra_r.posicion_id = 16
+    poses_dedo_conocidas.append(letra_r)
 
     ####### S id =17
-    letra_s = FingerDataFormation()
-    letra_s.position_name = 'S'
-    letra_s.curl_position = [
+    letra_s = DataFormacionDedo()
+    letra_s.nombre_posicion = 'S'
+    letra_s.curva_posicion = [
         [CurvaDeDedo.NoCurva,CurvaDeDedo.MediaCurva],  # Pulgar
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.FullCurva],  # Index
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.FullCurva],  # Medio
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.FullCurva],  # Anular
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.FullCurva]  # Menhique
     ]
-    letra_s.curl_position_confidence = [
+    letra_s.curva_posicion_determinacion = [
         [1.0,1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_s.finger_position = [
+    letra_s.dedo_posicion = [
         [PosicionDedo.EsquinaDerecha, PosicionDedo.ApuntaDerecha],  # Pulgar
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaInfIzquierda],  # Index
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaInfIzquierda],  # Medio
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaInfIzquierda],  # Anular
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaInfIzquierda]  # Menhique
     ]
-    letra_s.finger_position_confidence = [
+    letra_s.determinacion_posicion_dedo = [
         [1.0,1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0, 1.0],  # Anular
         [1.0, 1.0]  # Menhique
     ]
-    letra_s.position_id = 17
-    known_finger_poses.append(letra_s)
+    letra_s.posicion_id = 17
+    poses_dedo_conocidas.append(letra_s)
 
     ####### T id =18
-    letra_t = FingerDataFormation()
-    letra_t.position_name = 'T'
-    letra_t.curl_position = [
+    letra_t = DataFormacionDedo()
+    letra_t.nombre_posicion = 'T'
+    letra_t.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva],  # Medio
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva],  # Anular
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva]  # Menhique
     ]
-    letra_t.curl_position_confidence = [
+    letra_t.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_t.finger_position = [
+    letra_t.dedo_posicion = [
         [PosicionDedo.HaciaArriba],  # Pulgar
         [PosicionDedo.ApuntaIzquierda,PosicionDedo.EsquinaIzquierda],  # Index
         [PosicionDedo.EsquinaIzquierda],  # Medio
         [PosicionDedo.EsquinaIzquierda],  # Anular
         [PosicionDedo.EsquinaIzquierda]  # Menhique
     ]
-    letra_t.finger_position_confidence = [
+    letra_t.determinacion_posicion_dedo = [
         [1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_t.position_id = 18
-    known_finger_poses.append(letra_t)
+    letra_t.posicion_id = 18
+    poses_dedo_conocidas.append(letra_t)
 
     ####### U id =19
-    letra_u = FingerDataFormation()
-    letra_u.position_name = 'U'
-    letra_u.curl_position = [
+    letra_u = DataFormacionDedo()
+    letra_u.nombre_posicion = 'U'
+    letra_u.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.MediaCurva,CurvaDeDedo.NoCurva],  # Anular
         [CurvaDeDedo.NoCurva]  # Menhique
     ]
-    letra_u.curl_position_confidence = [
+    letra_u.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_u.finger_position = [
+    letra_u.dedo_posicion = [
         [PosicionDedo.EsquinaDerecha,PosicionDedo.HaciaArriba],  # Thumb
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha],  # Index
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.HaciaArriba],  # Middle
         [PosicionDedo.EsquinaIzquierda,PosicionDedo.HaciaArriba],  # Ring
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaIzquierda]  # Little
     ]
-    letra_u.finger_position_confidence = [
+    letra_u.determinacion_posicion_dedo = [
         [1.0,1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_u.position_id = 19
-    known_finger_poses.append(letra_u)
+    letra_u.posicion_id = 19
+    poses_dedo_conocidas.append(letra_u)
 
     ###### V id =20
-    letra_v = FingerDataFormation()
-    letra_v.position_name = 'V'
-    letra_v.curl_position = [
+    letra_v = DataFormacionDedo()
+    letra_v.nombre_posicion = 'V'
+    letra_v.curva_posicion = [
         [CurvaDeDedo.NoCurva, CurvaDeDedo.MediaCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.NoCurva],  # Anular
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.NoCurva]  # Menhique
     ]
-    letra_v.curl_position_confidence = [
+    letra_v.curva_posicion_determinacion = [
         [1.0,1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_v.finger_position = [
+    letra_v.dedo_posicion = [
         [PosicionDedo.EsquinaDerecha, PosicionDedo.HaciaArriba],  # Pulgar
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaIzquierda],  # Index
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaDerecha],  # Medio
         [PosicionDedo.EsquinaIzquierda, PosicionDedo.HaciaAbajo],  # Anular
         [PosicionDedo.EsquinaIzquierda, PosicionDedo.HaciaAbajo]  # Menhique
     ]
-    letra_v.finger_position_confidence = [
+    letra_v.determinacion_posicion_dedo = [
         [1.0,1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_v.position_id = 20
-    known_finger_poses.append(letra_v)
+    letra_v.posicion_id = 20
+    poses_dedo_conocidas.append(letra_v)
 
     ####### W id =21
-    letra_w = FingerDataFormation()
-    letra_w.position_name = 'W'
-    letra_w.curl_position = [
+    letra_w = DataFormacionDedo()
+    letra_w.nombre_posicion = 'W'
+    letra_w.curva_posicion = [
         [CurvaDeDedo.NoCurva, CurvaDeDedo.MediaCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.NoCurva],  # Anular
         [ CurvaDeDedo.MediaCurva,CurvaDeDedo.NoCurva]  # Menhique
     ]
-    letra_w.curl_position_confidence = [
+    letra_w.curva_posicion_determinacion = [
         [1.0,1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_w.finger_position = [
+    letra_w.dedo_posicion = [
         [PosicionDedo.EsquinaDerecha, PosicionDedo.ApuntaDerecha],  # Pulgar
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha],  # Index
         [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha],  # Medio
@@ -786,83 +786,83 @@ def create_known_finger_poses():
         [PosicionDedo.EsquinaIzquierda, PosicionDedo.HaciaAbajo]  # Menhique
     ]
 
-    letra_w.finger_position_confidence = [
+    letra_w.determinacion_posicion_dedo = [
         [1.0,1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0, 1.0]  # Menhique
     ]
-    letra_w.position_id = 21
-    known_finger_poses.append(letra_w)
+    letra_w.posicion_id = 21
+    poses_dedo_conocidas.append(letra_w)
 
     ####### X id =22
-    letra_x = FingerDataFormation()
-    letra_x.position_name = 'X'
-    letra_x.curl_position = [
+    letra_x = DataFormacionDedo()
+    letra_x.nombre_posicion = 'X'
+    letra_x.curva_posicion = [
         [CurvaDeDedo.NoCurva,CurvaDeDedo.MediaCurva],  # Pulgar
         [CurvaDeDedo.MediaCurva],  # Index
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva],  # Medio
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva],  # Anular
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva]  # Menhique
     ]
-    letra_x.curl_position_confidence = [
+    letra_x.curva_posicion_determinacion = [
         [1.0, 1.0],  # Pulgar
         [1.0],  # Index
         [1.0, 1.0],  # Medio
         [1.0, 1.0],  # Anul ar
         [1.0, 1.0]  # Menhique
     ]
-    letra_x.finger_position = [
+    letra_x.dedo_posicion = [
         [PosicionDedo.EsquinaDerecha, PosicionDedo.ApuntaDerecha],  # Thumb
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaDerecha],  # Index
         [PosicionDedo.EsquinaInfIzquierda,PosicionDedo.EsquinaIzquierda],  # Middle
         [PosicionDedo.EsquinaInfIzquierda,PosicionDedo.EsquinaIzquierda],  # Ring
         [PosicionDedo.EsquinaInfIzquierda,PosicionDedo.EsquinaIzquierda]  # Little
     ]
-    letra_x.finger_position_confidence = [
+    letra_x.determinacion_posicion_dedo = [
         [1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_x.position_id = 22
-    known_finger_poses.append(letra_x)
+    letra_x.posicion_id = 22
+    poses_dedo_conocidas.append(letra_x)
 
     ####### Y id =23
-    letra_y = FingerDataFormation()
-    letra_y.position_name = 'Y'
-    letra_y.curl_position = [
+    letra_y = DataFormacionDedo()
+    letra_y.nombre_posicion = 'Y'
+    letra_y.curva_posicion = [
         [CurvaDeDedo.NoCurva],  # Pulgar
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.FullCurva],  # Index
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.FullCurva],  # Medio
         [CurvaDeDedo.MediaCurva, CurvaDeDedo.FullCurva],  # Anular
         [CurvaDeDedo.NoCurva]  # Menhique
     ]
-    letra_y.curl_position_confidence = [
+    letra_y.curva_posicion_determinacion = [
         [1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0]  # Menhique
     ]
-    letra_y.finger_position = [
+    letra_y.dedo_posicion = [
         [PosicionDedo.ApuntaIzquierda, PosicionDedo.EsquinaIzquierda],  # Thumb
         [PosicionDedo.EsquinaIzquierda, PosicionDedo.HaciaArriba],  # Index
         [PosicionDedo.EsquinaIzquierda, PosicionDedo.HaciaArriba],  # Middle
         [PosicionDedo.EsquinaIzquierda, PosicionDedo.HaciaArriba],  # Ring
         [PosicionDedo.HaciaArriba, PosicionDedo.EsquinaIzquierda]  # Little
     ]
-    letra_y.finger_position_confidence = [
+    letra_y.determinacion_posicion_dedo = [
         [1.0,1.0],  # Pulgar
         [1.0,1.0],  # Index
         [1.0,1.0],  # Medio
         [1.0,1.0],  # Anular
         [1.0,1.0]  # Menhique
     ]
-    letra_y.position_id = 23
-    known_finger_poses.append(letra_y)
+    letra_y.posicion_id = 23
+    poses_dedo_conocidas.append(letra_y)
 
-    return known_finger_poses
+    return poses_dedo_conocidas
 
