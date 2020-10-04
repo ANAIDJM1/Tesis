@@ -60,22 +60,22 @@ def prediccion_por_geometria(keypoint_coord3d_v, poses_dedo_conocidas, threshold
     EsimacionDedoPose = EstimacionPoseDedo(keypoint_coord3d_v)
     EsimacionDedoPose.calcular_posicion_dedos(print_finger_info=True)
     posiciones_obtenidas = determinar_posicion(EsimacionDedoPose.Curvatura_dedo,
-                                               EsimacionDedoPose.finger_position, poses_dedo_conocidas,
+                                               EsimacionDedoPose.posicion_dedo, poses_dedo_conocidas,
                                                threshold * 10)
 
-    score_label = 'Indefinido'
+    etiqueta_score = 'Indefinido'
     if len(posiciones_obtenidas) > 0:
         max_pose_label = max(posiciones_obtenidas.items(), key=operator.itemgetter(1))[0]
         if posiciones_obtenidas[max_pose_label] >= threshold:
-            score_label = max_pose_label
+            etiqueta_score = max_pose_label
 
     print(posiciones_obtenidas)
-    return score_label
+    return etiqueta_score
 
-# prediccion por la red neuronal
-def predict_by_neural_network(keypoint_coord3d_v, known_finger_poses, pb_file, threshold):
+# prediccion por la red neuronal (esta parte viene definida por la red de Zimmermann)
+def predic_por_CNN(keypoint_coord3d_v, known_finger_poses, pb_file, threshold):
     detection_graph = tf.Graph()
-    score_label = 'Indefinido'
+    etiqueta_score = 'Indefinido'
     with detection_graph.as_default():
         od_graph_def = tf.GraphDef()
         with tf.gfile.GFile(pb_file, 'rb') as fid:
@@ -93,10 +93,10 @@ def predict_by_neural_network(keypoint_coord3d_v, known_finger_poses, pb_file, t
 
             max_index = np.argmax(outputs)
             score_index = max_index if outputs[max_index] >= threshold else -1
-            score_label = 'Indefinido' if score_index == -1 else get_position_name_with_pose_id(score_index,
+            etiqueta_score = 'Indefinido' if score_index == -1 else get_position_name_with_pose_id(score_index,
                                                                                                 known_finger_poses)
             print(outputs)
-    return score_label
+    return etiqueta_score
 
 
 if __name__ == '__main__':
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     args = parse_args()
 
     """capturar el frame y ponerlo en el path, guardarlo, y final mostrar el frame procesado, 
-    borrar """
+    borrar contenido carpetas"""
 
     #limpiarcarpeta de imagenes pre y post procesamiento
     video_captura = cv2.VideoCapture(0)
@@ -181,8 +181,8 @@ if __name__ == '__main__':
 
         # Clasificacion basada en CNN
         if args.solve_by == 1:
-            score_label = predict_by_neural_network(keypoint_coord3d_v, known_finger_poses,
-                                                        args.pb_file, args.threshold)
+            score_label = predic_por_CNN(keypoint_coord3d_v, known_finger_poses,
+                                         args.pb_file, args.threshold)
         elif args.solve_by == 0:
             score_label = prediccion_por_geometria(keypoint_coord3d_v, known_finger_poses, args.threshold)
 
