@@ -106,28 +106,33 @@ if __name__ == '__main__':
     """capturar el frame y ponerlo en el path, guardarlo, y final mostrar el frame procesado, 
     borrar contenido carpetas"""
 
-    #limpiarcarpeta de imagenes pre y post procesamiento
-    video_captura = cv2.VideoCapture(0)
+
     count=0
-    #tiempo que aparece la ventana para leer la senha
-    tiempo=7
+    #tiempo que aparece la ventana para leer la senha en segundos
+    tiempo=6
+    #empieza la cuenta
     inicio_tiempo=time.time()
+    # captura webcam
+    video_captura = cv2.VideoCapture(0)
 
     while(True):
 
-        #inicializa tiempo
+        #toma tiempo actual
         tiempo_presente=time.time()
         # Captura frame-por-frame
         ret, frame = video_captura.read()
 
+        #guarda el frame capturado por la webcam
         cv2.imwrite("./pose/test_data/frame%d.jpg" % count,frame)
         count+=1
-        # muestra el resultado del frame v2.imshow(window_name, image)
         tiempo_pasa = tiempo_presente - inicio_tiempo
-        cv2.imshow('Resultado de senia', frame)
-        if tiempo_pasa > tiempo:
-            break
 
+        # muestra el resultado del frame v2.imshow(window_name, image)
+        cv2.imshow('Resultado de senia', frame)
+        #
+        if cv2.waitKey(1) & (tiempo_pasa > tiempo):
+            break
+    # cuando too esta hecho, libera y destruye ventana
     video_captura.release()
     cv2.destroyAllWindows()
 
@@ -179,7 +184,7 @@ if __name__ == '__main__':
         else:
             keypoint_coord3d_v = sess.run(keypoint_coord3d_tf, feed_dict={image_tf: image_v})
 
-        # Clasificacion basada en CNN
+        # Clasificacion basada en el algoritmo de SVM
         if args.solve_by == 1:
             score_label = predic_por_CNN(keypoint_coord3d_v, known_finger_poses,
                                          args.pb_file, args.threshold)
@@ -194,8 +199,10 @@ if __name__ == '__main__':
         file_save_path = os.path.join(output_path, "{}_salida.jpg".format(file_name_comp[0]))
         mpimg.imsave(file_save_path, image_raw)
 
-        #arreglar la carpeta de salida
-        #reproducir imagenes como video o convertir a video
+        #volver video las imagenes y reproducir el video
+        
+        #guardar video en video_procesado
+        #limpiar la carpeta de entrada y de salida
 
 
 
