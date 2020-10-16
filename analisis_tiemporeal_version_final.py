@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import os
 import sys
-PATH = ('/home/any/Imágenes/tesis')
+PATH = ('/home/user/Imágenes/tesis')
 from mpl_toolkits.mplot3d import Axes3D
 import argparse
 import cv2

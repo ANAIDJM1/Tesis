@@ -33,7 +33,7 @@ el sistema o donde copio la carpeta principal.
 El prototipo usa la licencia de la red neuronal de 
 Christian Zimmerman & Thomas Brox que usó en una
 de las fases para su construcción.
-MAyor detalle de este en link: 
+Mayor detalle de este en link: 
 https://lmb.informatik.uni-freiburg.de/projects/hand3d/
 
 
