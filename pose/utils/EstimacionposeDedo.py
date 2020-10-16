@@ -9,11 +9,11 @@ from pose.utils.PosicionDedo import PosicionDedo
 class EstimacionPoseDedo:
     def __init__(self, coords_xyz):
         self.coords_xyz = np.squeeze(coords_xyz)
-        self.finger_position = [PosicionDedo.HaciaArriba, PosicionDedo.HaciaArriba,
-                                PosicionDedo.HaciaArriba, PosicionDedo.HaciaArriba,
-                                PosicionDedo.HaciaArriba]
-        self.finger_curled = [CurvaDeDedo.NoCurva, CurvaDeDedo.NoCurva, CurvaDeDedo.NoCurva,
-                             CurvaDeDedo.NoCurva, CurvaDeDedo.NoCurva,]
+        self.posicion_dedo = [PosicionDedo.HaciaArriba, PosicionDedo.HaciaArriba,
+                              PosicionDedo.HaciaArriba, PosicionDedo.HaciaArriba,
+                              PosicionDedo.HaciaArriba]
+        self.Curvatura_dedo = [CurvaDeDedo.NoCurva, CurvaDeDedo.NoCurva, CurvaDeDedo.NoCurva,
+                               CurvaDeDedo.NoCurva, CurvaDeDedo.NoCurva, ]
         self.slopes_xy = []
         self.slopes_yz = []
 
@@ -251,11 +251,11 @@ class EstimacionPoseDedo:
             #print('Finger: {} = {}'.format(Finger.get_finger_name(finger),
             #                              PosicionDedo.get_finger_position_name(finger_position)))
             
-            self.finger_curled[finger] = finger_curled
-            self.finger_position[finger] = finger_position
+            self.Curvatura_dedo[finger] = finger_curled
+            self.posicion_dedo[finger] = finger_position
 
         if print_finger_info:
-            for finger_index, curl, pos in zip(Dedo, self.finger_curled, self.finger_position):
+            for finger_index, curl, pos in zip(Dedo, self.Curvatura_dedo, self.posicion_dedo):
                 print('Dedo: {}, Curva: {}, Orientacion: {}'.format(
                         Dedo.obtener_nombre_dedo(finger_index), CurvaDeDedo.get_nombre_curvatura_dedo(curl),
                         PosicionDedo.get_nombre_posicion_dedo(pos)))

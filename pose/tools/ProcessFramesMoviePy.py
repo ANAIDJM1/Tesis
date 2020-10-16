@@ -103,8 +103,8 @@ def process_video_frame(video_frame):
 def process_keypoints(keypoint_coord3d_v):
 	fingerPoseEstimate = EstimacionPoseDedo(keypoint_coord3d_v)
 	fingerPoseEstimate.calcular_posicion_dedos(print_finger_info = False)
-	obtained_positions = determinar_posicion(fingerPoseEstimate.finger_curled,
-											 fingerPoseEstimate.finger_position, poses_dedo_conocidas,
+	obtained_positions = determinar_posicion(fingerPoseEstimate.Curvatura_dedo,
+											 fingerPoseEstimate.posicion_dedo, poses_dedo_conocidas,
 											 threshold)
 
 	score_label = None
