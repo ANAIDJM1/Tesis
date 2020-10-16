@@ -1,0 +1,40 @@
+Prototipo traductor de lenguaje de señas basicas
+usando machine learning
+
+AUTORAS: ANAID JIMENEZ MOREANO / BRENDA QQUECHO CCACHAINCA
+
+Es importante que antes de correr el codigo tome en cuenta
+las siguientes indicaciones:
+
+1.- Descargar el dataset del siguiente link:
+https://lmb.informatik.uni-freiburg.de/data/RenderedHandpose/RHD_v1-1.zip
+
+Para mayor información sobre este dataset, puede
+revisar el siguiente enlace:
+https://lmb.informatik.uni-freiburg.de/resources/datasets/RenderedHandposeDataset.en.html
+
+2.-Descargar la carpeta "weights",que se halla en el
+siguiente enlace: 
+https://mega.nz/folder/mOgUAQpL#ypCQdbgFZrWTLa8eAngJUg
+
+ y pegarla en la raiz del proyecto al lado de utils y demás
+carpetas.
+
+3.-Descargar el archivo "bin" y pegarlo dentro de la
+carpeta "data", el archivo se halla en el siguiente enlace:
+https://mega.nz/folder/mOgUAQpL#ypCQdbgFZrWTLa8eAngJUg
+
+4.-Verificar la ruta "PATH = ('/home/user/Imágenes/tesis')"
+de los archivos y cambiarlos a la ruta donde ejecutara
+el sistema o donde copio la carpeta principal.
+
+5.- Antes de empezar vacie las carpetas de "test_data", "test_data_salida" y "video_procesado".
+
+El prototipo usa la licencia de la red neuronal de 
+Christian Zimmerman & Thomas Brox que usó en una
+de las fases para su construcción.
+MAyor detalle de este en link: 
+https://lmb.informatik.uni-freiburg.de/projects/hand3d/
+
+
+
