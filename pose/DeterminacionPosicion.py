@@ -36,14 +36,14 @@ def determinar_posicion(posiciones_curvatura, posiciones_dedo, posiciones_dedo_c
     return posicion_obtenida
 
 
-def get_position_name_with_pose_id(pose_id, poses_dedo):
+def get_nombrePosicion_id(pose_id, poses_dedo):
     for pose_dedo in poses_dedo:
         if pose_dedo.posicion_id == pose_id:
             return pose_dedo.nombre_posicion
     return None
 
 
-def create_known_finger_poses():
+def crear_poses_conocidasDedos():
     poses_dedo_conocidas = []
 
     #LETRAS DEL ABECEDARIO EXCEPTUANDO LA "J" Y LA "Z"

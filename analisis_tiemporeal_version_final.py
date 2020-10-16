@@ -14,10 +14,11 @@ import cv2
 import operator
 import time
 import pickle
+import glob
 
 from nets.ColorHandPose3DNetwork import ColorHandPose3DNetwork
 from utils.general import detect_keypoints, trafo_coords, plot_hand, plot_hand_2d, plot_hand_3d
-from pose.DeterminacionPosicion import create_known_finger_poses, determinar_posicion, get_position_name_with_pose_id
+from pose.DeterminacionPosicion import crear_poses_conocidasDedos, determinar_posicion, get_nombrePosicion_id
 from pose.utils.EstimacionposeDedo import EstimacionPoseDedo
 
 
@@ -30,7 +31,7 @@ def parse_args():
     parser.add_argument('--thresh', dest='threshold', help='Umbral de nivel de confianza(0-1)', default=0.45,
                         type=float)
     parser.add_argument('--solve-by', dest='solve_by', default=0, type=int,
-                        help='Metodo para hacer el calculo: (0=Geometria, 1=Red Neuronal Zimmerman)')
+                        help='Metodo para hacer el calculo: (0=Geometria, 1=Red Neuronal)')
     #Si se resuelve por red neuronal se entrega la ruta de los graficos pb-file
     parser.add_argument('--pb-file', dest='pb_file', type=str, default=None,
                         help='Ruta donde el grafico de la CNN se guarda.')
@@ -93,7 +94,7 @@ def predic_por_CNN(keypoint_coord3d_v, known_finger_poses, pb_file, threshold):
 
             max_index = np.argmax(outputs)
             score_index = max_index if outputs[max_index] >= threshold else -1
-            etiqueta_score = 'Indefinido' if score_index == -1 else get_position_name_with_pose_id(score_index,
+            etiqueta_score = 'Indefinido' if score_index == -1 else get_nombrePosicion_id(score_index,
                                                                                                 known_finger_poses)
             print(outputs)
     return etiqueta_score
@@ -109,7 +110,7 @@ if __name__ == '__main__':
 
     count=0
     #tiempo que aparece la ventana para leer la senha en segundos
-    tiempo=6
+    tiempo=8
     #empieza la cuenta
     inicio_tiempo=time.time()
     # captura webcam
@@ -142,7 +143,7 @@ if __name__ == '__main__':
     data_files, output_path = prepara_entrada(data_path, data_path2)
     if not os.path.exists(output_path):
         os.mkdir(output_path)
-    known_finger_poses = create_known_finger_poses()
+    known_finger_poses = crear_poses_conocidasDedos()
 
     # ENTRADA DE RED
     image_tf = tf.placeholder(tf.float32, shape=(1, 240, 320, 3))
@@ -199,10 +200,49 @@ if __name__ == '__main__':
         file_save_path = os.path.join(output_path, "{}_salida.jpg".format(file_name_comp[0]))
         mpimg.imsave(file_save_path, image_raw)
 
-        #volver video las imagenes y reproducir el video
-        
-        #guardar video en video_procesado
-        #limpiar la carpeta de entrada y de salida
 
+    #--------------------------------------------------------//-------------------------------------
+    #volver video las imagenes y reproducir el video
+    img_array = []
+    for imagenesprocesadas in glob.glob('./pose/test_data_salida/*.jpg'):
+        img = cv2.imread(imagenesprocesadas)
+        height, width, layers = img.shape
+        size = (width, height)
+        img_array.append(img)
+
+    # guardar video en video_procesado
+    out = cv2.VideoWriter('./pose/video_procesado/video_final.mp4', cv2.VideoWriter_fourcc(*'MP4V'), 15, size)
+
+    for i in range(len(img_array)):
+        out.write(img_array[i])
+    out.release()
+
+    #-----------------------------------
+
+    # Reproduce video procesado
+    cap2 = cv2.VideoCapture('./pose/video_procesado/video_final.mp4')
+    if (cap2.isOpened() == False):
+        print("Error , no se puede abrir el video")
+    while (cap2.isOpened()):
+        ret, frame2 = cap2.read()
+        if ret == True:
+            cv2.imshow('Video de salida', frame2)
+            if cv2.waitKey(50) & 0xFF == ord('q'):
+                break
+        else:
+            break
+
+    cap2.release()
+    cv2.destroyAllWindows()
+
+    #limpiar la carpeta de entrada y de salida
+    #borrar elementos de pose/test_data
+    fotos1 = glob.glob('./pose/test_data/*')
+    for f in fotos1:
+        os.remove(f)
+    #borrar elementos de pose/test_data_salida
+    fotos2 = glob.glob('./pose/test_data_salida/*')
+    for f2 in fotos2:
+        os.remove(f2)
 
 
