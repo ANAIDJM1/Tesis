@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import os
 import sys
-PATH = ('/home/user/Imágenes/tesis')
+PATH = ('/home/any/Imágenes/tesis')
 from mpl_toolkits.mplot3d import Axes3D
 import argparse
 import cv2
@@ -241,8 +241,8 @@ if __name__ == '__main__':
     for f in fotos1:
         os.remove(f)
     #borrar elementos de pose/test_data_salida
-    fotos2 = glob.glob('./pose/test_data_salida/*')
-    for f2 in fotos2:
-        os.remove(f2)
+    #fotos2 = glob.glob('./pose/test_data_salida/*')
+    #for f2 in fotos2:
+    #    os.remove(f2)
 
 

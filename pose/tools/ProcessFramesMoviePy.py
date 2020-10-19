@@ -123,8 +123,8 @@ if __name__ == '__main__':
 	args = parse_args()
 	threshold = args.threshold * 10
 	video_path, output_txt_path, output_video_path = prepare_paths(args.video_path, args.output_path)
-	poses_dedo_conocidas = create_known_finger_poses()
-	reqd_pose_name = get_position_name_with_pose_id(args.pose_no, poses_dedo_conocidas)
+	poses_dedo_conocidas = crear_poses_conocidasDedos()
+	reqd_pose_name = get_nombrePosicion_id(args.pose_no, poses_dedo_conocidas)
 								
 	sess, image_tf, keypoint_coord3d_tf, scale_tf, center_tf, keypoints_scoremap_tf = prepare_network()
 	network_elements = [keypoint_coord3d_tf, scale_tf, center_tf, keypoints_scoremap_tf]
