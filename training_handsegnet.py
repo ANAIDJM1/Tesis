@@ -25,7 +25,7 @@ from nets.ColorHandPose3DNetwork import ColorHandPose3DNetwork
 from data.BinaryDbReader import BinaryDbReader
 from utils.general import LearningRateScheduler, load_weights_from_snapshot
 
-# training parameters
+# entrenamiento parameters
 train_para = {'lr': [1e-5, 1e-6, 1e-7],
               'lr_iter': [20000, 30000],
               'max_iter': 40000,
@@ -34,7 +34,7 @@ train_para = {'lr': [1e-5, 1e-6, 1e-7],
               'snapshot_dir': 'snapshots_handsegnet'}
 
 # get dataset
-dataset = BinaryDbReader(mode='training',
+dataset = BinaryDbReader(mode='entrenamiento',
                          batch_size=8, shuffle=True,
                          hue_aug=True, random_crop_to_size=True)
 

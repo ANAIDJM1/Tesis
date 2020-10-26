@@ -36,7 +36,7 @@ class BinaryDbReaderSTB(object):
                  crop_center_noise=False, crop_scale_noise=False, crop_offset_noise=False,
                  scoremap_dropout=False):
         """ Inputs:
-                mode: string, Indicates which binary file to read. Can be 'training' or 'evaluation'
+                mode: string, Indicates which binary file to read. Can be 'entrenamiento' or 'evaluation'
                 batch_size: int, Number of samples forming a batch
                 shuffle: boolean, If true samples of binary file are shuffled while reading
                 use_wrist_coord: boolean, When true keypoint #0 is the wrist, palm center otherwise
@@ -52,10 +52,10 @@ class BinaryDbReaderSTB(object):
                 scoremap_dropout: boolean, Randomly drop scoremap channels
         """
         self.num_samples = 0
-        if mode == 'training':
+        if mode == 'entrenamiento':
             # self.path_to_db = './data/stb_train_shuffled.bin'
             self.num_samples = 30000
-            assert 0, "This set is not for training!"
+            assert 0, "This set is not for entrenamiento!"
         elif mode == 'evaluation':
             self.path_to_db = './data/stb/stb_eval.bin'
             self.num_samples = 6000
@@ -451,7 +451,7 @@ if __name__ == '__main__':
         plt.show()
 
     # # Test functionality: CROP
-    # dataset = BinaryDbReaderSHB(mode='training', shuffle=False, hand_crop=True, crop_center_noise=True)
+    # dataset = BinaryDbReaderSHB(mode='entrenamiento', shuffle=False, hand_crop=True, crop_center_noise=True)
     # data = dataset.get()
     # session = tf.Session()
     # tf.train.start_queue_runners(sess=session)

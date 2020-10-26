@@ -32,7 +32,7 @@ class ColorHandPose3DNetwork(object):
         self.num_kp = 21
 
     def init(self, session, weight_files=None, exclude_var_list=None):
-        """ Inicializa pesos dr un archivo .pickle
+        """ Inicializa pesos de un archivo .pickle
 
             Inputs:
             Session: Tf.Session, Tensorflow objeto de sesión que contiene el gráfico de red
@@ -49,7 +49,7 @@ class ColorHandPose3DNetwork(object):
 
         # Initialize with weights
         for file_name in weight_files:
-            assert os.path.exists(file_name), "File not found."
+            assert os.path.exists(file_name), "Archivo no encontrado de pesos"
             with open(file_name, 'rb') as fi:
                 weight_dict = pickle.load(fi)
                 weight_dict = {k: v for k, v in weight_dict.items() if not any([x in k for x in exclude_var_list])}
@@ -66,7 +66,7 @@ class ColorHandPose3DNetwork(object):
             Inputs:
                 image: [B, H, W, 3] tf.float32 tensor, Image with mean subtracted
                 hand_side: [B, 2] tf.float32 tensor, One hot encoding if the image is showing left or right side
-                evaluation: [] tf.bool tensor, True while evaluation false during training (controls dropout)
+                evaluation: [] tf.bool tensor, True while evaluation false during entrenamiento (controls dropout)
 
             Outputs:
                 hand_scoremap: [B, H, W, 2] tf.float32 tensor, Scores for background and hand class
@@ -226,7 +226,7 @@ class ColorHandPose3DNetwork(object):
             Inputs:
                 keypoints_scoremap: [B, 32, 32, 21] tf.float32 tensor, Scores for the hand keypoints
                 hand_side: [B, 2] tf.float32 tensor, One hot encoding if the image is showing left or right side
-                evaluation: [] tf.bool tensor, True while evaluation false during training (controls dropout)
+                evaluation: [] tf.bool tensor, True while evaluation false during entrenamiento (controls dropout)
                 train: bool, True in case weights should be trainable
 
             Outputs:

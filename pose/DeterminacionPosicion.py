@@ -194,25 +194,25 @@ def crear_poses_conocidasDedos():
         [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva]   # Menhique
     ]
     letra_e.curva_posicion_determinacion = [
-        [1.0,0.5],  # Pulgar
-        [1.0,0.5],  # Index
-        [1.0,0.5],  # Medio
-        [1.0,0.5],  # Anular
-        [1.0,0.5]  # Menhique
+        [1.0,0.8],  # Pulgar
+        [1.0,0.8],  # Index
+        [1.0,0.8],  # Medio
+        [1.0,0.8],  # Anular
+        [1.0,0.8]  # Menhique
     ]
     letra_e.dedo_posicion = [
-        [PosicionDedo.HaciaArriba,PosicionDedo.ApuntaDerecha],  # Pulgar
-        [PosicionDedo.EsquinaIzquierda,PosicionDedo.HaciaArriba],  # Index
-        [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaIzquierda],  # Medio
-        [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaIzquierda],  # Anular
-        [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaIzquierda]  # Menhique
+        [PosicionDedo.HaciaArriba,PosicionDedo.ApuntaDerecha, PosicionDedo.EsquinaIzquierda],  # Pulgar
+        [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaIzquierda],  # Index
+        [PosicionDedo.HaciaArriba],  # Medio
+        [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha],  # Anular
+        [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha]  # Menhique
     ]
     letra_e.determinacion_posicion_dedo = [
-        [1.0,0.5],  # Pulgar
-        [1.0,0.5],  # Index
-        [1.0,0.5],  # Medio
-        [1.0,0.5],  # Anular
-        [1.0,0.5]  # Menhique
+        [1.0,0.5,0.8],  # Pulgar
+        [1.0,0.7],  # Index
+        [1.0],  # Medio
+        [1.0,0.8],  # Anular
+        [1.0,0.8]  # Menhique
     ]
     letra_e.posicion_id = 4
     poses_dedo_conocidas.append(letra_e)
@@ -221,15 +221,15 @@ def crear_poses_conocidasDedos():
     letra_f = DataFormacionDedo()
     letra_f.nombre_posicion = 'F'
     letra_f.curva_posicion = [
-        [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva],  # Pulgar
-        [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva],  # Index
+        [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva],  # Pulgar
+        [CurvaDeDedo.FullCurva, CurvaDeDedo.MediaCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.NoCurva],  # Anular
         [CurvaDeDedo.NoCurva]  # Menhique
     ]
     letra_f.curva_posicion_determinacion = [
-        [1.0,1.0],  # Pulgar
-        [1.0,1.0],  # Index
+        [1.0,0.8],  # Pulgar
+        [0.5,1.0],  # Index
         [1.0],  # Medio
         [1.0],  # Anular
         [1.0]  # Menhique
@@ -237,16 +237,16 @@ def crear_poses_conocidasDedos():
     letra_f.dedo_posicion = [
         [PosicionDedo.EsquinaIzquierda],  # Pulgar
         [PosicionDedo.HaciaArriba],  # Index
-        [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha],  # Medio
-        [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha],  # Anular
-        [PosicionDedo.HaciaArriba,PosicionDedo.EsquinaDerecha]  # Menhique
+        [PosicionDedo.HaciaArriba],  # Medio
+        [PosicionDedo.HaciaArriba],  # Anular
+        [PosicionDedo.HaciaArriba]  # Menhique
     ]
     letra_f.determinacion_posicion_dedo = [
         [1.0],  # Pulgar
         [1.0],  # Index
-        [0.5,1.0],  # Medio
-        [0.5,1.0],  # Anular
-        [0.5,1.0]  # Menhique
+        [1.0],  # Medio
+        [1.0],  # Anular
+        [1.0]  # Menhique
     ]
     letra_f.posicion_id = 5
     poses_dedo_conocidas.append(letra_f)
@@ -289,32 +289,32 @@ def crear_poses_conocidasDedos():
     letra_h = DataFormacionDedo()
     letra_h.nombre_posicion = 'H'
     letra_h.curva_posicion = [
-        [CurvaDeDedo.MediaCurva,CurvaDeDedo.NoCurva],  # Pulgar
+        [CurvaDeDedo.MediaCurva,CurvaDeDedo.FullCurva],  # Pulgar
         [CurvaDeDedo.NoCurva],  # Index
         [CurvaDeDedo.NoCurva],  # Medio
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva],  # Anular
         [CurvaDeDedo.FullCurva,CurvaDeDedo.MediaCurva]  # Menhique
     ]
     letra_h.curva_posicion_determinacion = [
-        [1.0,1.0],  # Pulgar
+        [0.5,1.0],  # Pulgar
         [1.0],  # Index
         [1.0],  # Medio
-        [0.8,1.0],  # Anular
-        [0.8,1.0]  # Menhique
+        [1.0,0.5],  # Anular
+        [1.0,0.5]  # Menhique
     ]
     letra_h.dedo_posicion = [
-        [PosicionDedo.EsquinaIzquierda,PosicionDedo.ApuntaIzquierda],  # Pulgar
-        [PosicionDedo.ApuntaIzquierda,PosicionDedo.EsquinaIzquierda],  # Index
-        [PosicionDedo.ApuntaIzquierda,PosicionDedo.EsquinaIzquierda],  # Medio
-        [PosicionDedo.ApuntaIzquierda,PosicionDedo.EsquinaIzquierda],  # Anular
-        [PosicionDedo.ApuntaIzquierda,PosicionDedo.EsquinaIzquierda]  # Menhique
+        [PosicionDedo.ApuntaIzquierda],  # Pulgar
+        [PosicionDedo.ApuntaIzquierda],  # Index
+        [PosicionDedo.ApuntaIzquierda],  # Medio
+        [PosicionDedo.ApuntaIzquierda],  # Anular
+        [PosicionDedo.ApuntaIzquierda]  # Menhique
     ]
     letra_h.determinacion_posicion_dedo = [
-        [1.0,1.0],  # Pulgar
-        [0.8,1.0],  # Index
-        [0.8,1.0],  # Medio
-        [0.8,1.0],  # Anular
-        [0.8,1.0]  # Menhique
+        [1.0],  # Pulgar
+        [1.0],  # Index
+        [1.0],  # Medio
+        [1.0],  # Anular
+        [1.0]  # Menhique
     ]
     letra_h.posicion_id = 7
     poses_dedo_conocidas.append(letra_h)

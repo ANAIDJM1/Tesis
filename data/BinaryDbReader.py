@@ -37,7 +37,7 @@ class BinaryDbReader(object):
                  crop_center_noise=False, crop_scale_noise=False, crop_offset_noise=False,
                  scoremap_dropout=False):
         """ Inputs:
-                mode: string, Indicates which binary file to read. Can be 'training' or 'evaluation'
+                mode: string, Indicates which binary file to read. Can be 'entrenamiento' or 'evaluation'
                 batch_size: int, Number of samples forming a batch
                 shuffle: boolean, If true samples of binary file are shuffled while reading
                 use_wrist_coord: boolean, When true keypoint #0 is the wrist, palm center otherwise
@@ -56,7 +56,7 @@ class BinaryDbReader(object):
         self.path_to_db = './data/bin/'
 
         self.num_samples = 0
-        if mode == 'training':
+        if mode == 'entrenamiento':
             self.path_to_db += 'rhd_training.bin'
             self.num_samples = 41258
         elif mode == 'evaluation':

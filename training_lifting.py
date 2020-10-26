@@ -32,7 +32,7 @@ from utils.general import LearningRateScheduler
 # VARIANT = 'local_w_xyz_loss'
 VARIANT = 'proposed'
 
-# training parameters
+# entrenamiento parameters
 train_para = {'lr': [1e-5, 1e-6],
               'lr_iter': [60000],
               'max_iter': 80000,
@@ -41,7 +41,7 @@ train_para = {'lr': [1e-5, 1e-6],
               'snapshot_dir': 'snapshots_lifting_%s' % VARIANT}
 
 # get dataset
-dataset = BinaryDbReader(mode='training',
+dataset = BinaryDbReader(mode='entrenamiento',
                          batch_size=8, shuffle=True, hand_crop=True, use_wrist_coord=False,
                          coord_uv_noise=True, crop_center_noise=True, crop_offset_noise=True, crop_scale_noise=True)
 

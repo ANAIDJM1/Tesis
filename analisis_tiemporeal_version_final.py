@@ -15,6 +15,8 @@ import operator
 import time
 import pickle
 import glob
+from sklearn import svm
+from sklearn.svm import SVC
 
 from nets.ColorHandPose3DNetwork import ColorHandPose3DNetwork
 from utils.general import detect_keypoints, trafo_coords, plot_hand, plot_hand_2d, plot_hand_3d
@@ -35,6 +37,8 @@ def parse_args():
     #Si se resuelve por red neuronal se entrega la ruta de los graficos pb-file
     parser.add_argument('--pb-file', dest='pb_file', type=str, default=None,
                         help='Ruta donde el grafico de la CNN se guarda.')
+    #Si se resuelve por SVM, se le da la ruta del archivo svc pickle
+    parser.add_argument('--svc-file',dest='svc_file',type=str,default=None, help='Ruta donde se almacena el SVC pickle')
 
     args = parser.parse_args()
     return args
@@ -100,6 +104,17 @@ def predic_por_CNN(keypoint_coord3d_v, known_finger_poses, pb_file, threshold):
     return etiqueta_score
 
 
+def prediccion_por_svm(keypoint_coord3d_v, known_finger_poses, svc_file):
+    with open(svc_file, 'rb') as handle:
+        svc= pickle.load(handle)
+
+
+    flat_keypoint = np.array([entry for sublist in keypoint_coord3d_v for entry in sublist])
+    flat_keypoint = np.expand_dims(flat_keypoint, axis=0)
+    max_index = svc.predict(flat_keypoint)[0]
+    etiqueta_score = get_nombrePosicion_id(max_index, known_finger_poses)
+    return etiqueta_score
+
 if __name__ == '__main__':
 
     args = parse_args()
@@ -110,7 +125,7 @@ if __name__ == '__main__':
 
     count=0
     #tiempo que aparece la ventana para leer la senha en segundos
-    tiempo=8
+    tiempo=5
     #empieza la cuenta
     inicio_tiempo=time.time()
     # captura webcam
@@ -147,7 +162,7 @@ if __name__ == '__main__':
 
     # ENTRADA DE RED
     image_tf = tf.placeholder(tf.float32, shape=(1, 240, 320, 3))
-    hand_side_tf = tf.constant([[1.0, 1.0]])  # Both left and right hands included
+    hand_side_tf = tf.constant([[1.0, 1.0]])  # Ambas manos incluidas
     evaluation = tf.placeholder_with_default(True, shape=())
 
     # CONSTRUCCION DE RED
@@ -185,12 +200,17 @@ if __name__ == '__main__':
         else:
             keypoint_coord3d_v = sess.run(keypoint_coord3d_tf, feed_dict={image_tf: image_v})
 
-        # Clasificacion basada en el algoritmo de SVM
-        if args.solve_by == 1:
+        # Clasificacion basada en el algoritmo de CNN
+        if args.solve_by == 0:
             score_label = predic_por_CNN(keypoint_coord3d_v, known_finger_poses,
                                          args.pb_file, args.threshold)
-        elif args.solve_by == 0:
+        #clasificacion basada en geometria de dedos
+        elif args.solve_by == 1:
             score_label = prediccion_por_geometria(keypoint_coord3d_v, known_finger_poses, args.threshold)
+
+        #Clasificacion basada en SVM
+        elif args.solve_by == 2:
+            score_label = prediccion_por_svm(keypoint_coord3d_v, known_finger_poses, args.svc_file)
 
         font = cv2.FONT_HERSHEY_SIMPLEX
         cv2.putText(image_raw, score_label, (10, 200), font, 1.0, (255, 0, 0), 2, cv2.LINE_AA)

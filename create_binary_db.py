@@ -33,8 +33,8 @@ import struct
 # SET THIS to where RHD is located on your machine
 path_to_db = 'RHD_v1-1/RHD_published_v2/'
 
-# chose if you want to create a binary for training or evaluation set
-#set = 'training'
+# chose if you want to create a binary for entrenamiento or evaluation set
+#set = 'entrenamiento'
 set = 'evaluation'
 
 ### No more changes below this line ###
