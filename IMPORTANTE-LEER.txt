@@ -64,6 +64,11 @@ que entrenara y adicionara el entrenamiento de dicha letra al prototipo.
 python3 pose/entrenamiento/SVM.py './pose/video/letra.csv'
 
 
+Para ver como deberian salir la seña procesada, se observa en la carpeta pose/video_procesado,
+los videos procesados de las letras del abeceario de LSP.
+
+Nota: Antes de volver a correr no olvide vaciar las carpetas pose/test_data, pose/test_data_salida 
+
 ------------------------------------
 LIBRERIAS IMPORTANTES (VERSIONES USADAS):
 imageio (2.9.0)
