@@ -78,7 +78,7 @@ def prediccion_por_geometria(keypoint_coord3d_v, poses_dedo_conocidas, threshold
     return etiqueta_score
 
 # prediccion por la red neuronal (esta parte viene definida por la red de Zimmermann)
-def predic_por_CNN(keypoint_coord3d_v, known_finger_poses, pb_file, threshold):
+def predic_por_CNN(keypoint_coord3d_v, poses_dedo_conocidas, pb_file, threshold):
     detection_graph = tf.Graph()
     etiqueta_score = 'Indefinido'
     with detection_graph.as_default():
@@ -99,21 +99,23 @@ def predic_por_CNN(keypoint_coord3d_v, known_finger_poses, pb_file, threshold):
             max_index = np.argmax(outputs)
             score_index = max_index if outputs[max_index] >= threshold else -1
             etiqueta_score = 'Indefinido' if score_index == -1 else get_nombrePosicion_id(score_index,
-                                                                                                known_finger_poses)
+                                                                                          poses_dedo_conocidas)
             print(outputs)
     return etiqueta_score
 
 
-def prediccion_por_svm(keypoint_coord3d_v, known_finger_poses, svc_file):
+def prediccion_por_svm(keypoint_coord3d_v, poses_dedo_conocidas, svc_file):
     with open(svc_file, 'rb') as handle:
-        svc= pickle.load(handle)
+        svc = pickle.load(handle)
 
 
     flat_keypoint = np.array([entry for sublist in keypoint_coord3d_v for entry in sublist])
     flat_keypoint = np.expand_dims(flat_keypoint, axis=0)
-    max_index = svc.predict(flat_keypoint)[0]
-    etiqueta_score = get_nombrePosicion_id(max_index, known_finger_poses)
+    max_index = svc.predict(flat_keypoint)
+    etiqueta_score = get_nombrePosicion_id(max_index, poses_dedo_conocidas)
     return etiqueta_score
+
+
 
 if __name__ == '__main__':
 
@@ -202,8 +204,8 @@ if __name__ == '__main__':
 
         # Clasificacion basada en el algoritmo de CNN
         if args.solve_by == 0:
-            score_label = predic_por_CNN(keypoint_coord3d_v, known_finger_poses,
-                                         args.pb_file, args.threshold)
+            score_label = predic_por_CNN(keypoint_coord3d_v, known_finger_poses, args.pb_file, args.threshold)
+
         #clasificacion basada en geometria de dedos
         elif args.solve_by == 1:
             score_label = prediccion_por_geometria(keypoint_coord3d_v, known_finger_poses, args.threshold)
@@ -211,6 +213,7 @@ if __name__ == '__main__':
         #Clasificacion basada en SVM
         elif args.solve_by == 2:
             score_label = prediccion_por_svm(keypoint_coord3d_v, known_finger_poses, args.svc_file)
+
 
         font = cv2.FONT_HERSHEY_SIMPLEX
         cv2.putText(image_raw, score_label, (10, 200), font, 1.0, (255, 0, 0), 2, cv2.LINE_AA)
