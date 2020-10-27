@@ -36,6 +36,65 @@ de las fases para su construcción.
 Mayor detalle de este en link: 
 https://lmb.informatik.uni-freiburg.de/projects/hand3d/
 
+----------------------------------------------------------
+
+PARA CORRER EL PROTOTIPO
+1) Para hacer correr la red mediante geometria de dedos corra el siguiente comando:
+python3 analisis_tiemporeal_version_final.py  --solve-by=1
+
+2) Para hacer correr la red mediante Red Neuronal corra el siguiente comando:
+python3 analisis_tiemporeal_version_final.py  --solve-by=0 --pb-file=./pose/modelos_aprendidos/graph.pb 
+
+3) Para hacer correr la red mediante SVM corra el siguiente comando:
+python3 analisis_tiemporeal_version_final.py  --solve-by=2 --svc-file=./pose/modelos_aprendidos/svc.pickle
+
+
+PARA ENTENAR EL PROTOTIPO
+1) Para entrenar por Red Neuronal realice un video de 7 a 10 seg aproximadamente, coloquelo
+en la carpeta "./pose/video/letra.mp4" (de las letras que desee entrenar en formato .mp4)
+corra el siguiente comando: 
+python3 pose/tools/ProcesaFramesMoviePy.py ./pose/video/letra.mp4 id_letra 
+
+2) El "id_letra" del comando anterior es establecido en el archivo DeterminacionPosicion.py como el id que corresponde a la pose de la letra, que se halla en la carpeta "pose", este generara un archivo con extension .csv que servira para correr luego el comando:
+python3 pose/entrenamiento/RedNeuronal.py './pose/video/letra.csv'
+
+que entrenara y adicionara el entrenamiento de dicha letra al prototipo.
+
+3) Para entrenar por SVM, repetimos el paso 1 y para el paso 2 corremos el siguiente comando:
+python3 pose/entrenamiento/SVM.py './pose/video/letra.csv'
+
+
+------------------------------------
+LIBRERIAS IMPORTANTES (VERSIONES USADAS):
+imageio (2.9.0)
+matplotlib (3.2.0)
+moviepy (1.0.1)
+numpy (1.19.1)
+opencv-python (4.2.0.32)
+openshot-qt (2.5.1.dev2)
+Pillow (7.2.0)
+pip (9.0.1)
+proglog (0.1.9)
+python-apt (1.6.5+ubuntu0.3)
+python-dateutil (2.8.1)
+python-debian (0.1.32)
+reportlab (3.4.0)
+scikit-learn (0.23.2)
+scipy (1.1.0)
+systemd-python (234)
+tensorflow (1.3.0)
+tensorflow-tensorboard (0.1.8)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
