@@ -33,10 +33,11 @@ def parse_args():
     parser.add_argument('--thresh', dest='threshold', help='Umbral de nivel de confianza(0-1)', default=0.45,
                         type=float)
     parser.add_argument('--solve-by', dest='solve_by', default=0, type=int,
-                        help='Metodo para hacer el calculo: (0=Geometria, 1=Red Neuronal)')
+                        help='Metodo para hacer el calculo de la pose: (0=CNN, 1=Geometria de dedos, 2=SVM)')
     #Si se resuelve por red neuronal se entrega la ruta de los graficos pb-file
     parser.add_argument('--pb-file', dest='pb_file', type=str, default=None,
-                        help='Ruta donde el grafico de la CNN se guarda.')
+                        help='Ruta donde se guarda el archivo graph.pb que usa la CNN para funcionar, es el modelo'
+                             'aprendido')
     #Si se resuelve por SVM, se le da la ruta del archivo svc pickle
     parser.add_argument('--svc-file',dest='svc_file',type=str,default=None, help='Ruta donde se almacena el SVC pickle')
 
@@ -77,20 +78,20 @@ def prediccion_por_geometria(keypoint_coord3d_v, poses_dedo_conocidas, threshold
     print(posiciones_obtenidas)
     return etiqueta_score
 
-# prediccion por la red neuronal (esta parte viene definida por la red de Zimmermann)
-def predic_por_CNN(keypoint_coord3d_v, poses_dedo_conocidas, pb_file, threshold):
-    detection_graph = tf.Graph()
+# prediccion por la red neuronal fase II
+def predic_por_RedNeuronal(keypoint_coord3d_v, poses_dedo_conocidas, pb_file, threshold):
+    deteccion_graph = tf.Graph()
     etiqueta_score = 'Indefinido'
-    with detection_graph.as_default():
+    with deteccion_graph.as_default():
         od_graph_def = tf.GraphDef()
         with tf.gfile.GFile(pb_file, 'rb') as fid:
             serialized_graph = fid.read()
             od_graph_def.ParseFromString(serialized_graph)
             tf.import_graph_def(od_graph_def, name='')
 
-        with tf.Session(graph=detection_graph) as sess:
-            input_tensor = detection_graph.get_tensor_by_name('input:0')
-            output_tensor = detection_graph.get_tensor_by_name('output:0')
+        with tf.Session(graph=deteccion_graph) as sess:
+            input_tensor = deteccion_graph.get_tensor_by_name('input:0')
+            output_tensor = deteccion_graph.get_tensor_by_name('output:0')
 
             flat_keypoint = np.array([entry for sublist in keypoint_coord3d_v for entry in sublist])
             flat_keypoint = np.expand_dims(flat_keypoint, axis=0)
@@ -127,7 +128,7 @@ if __name__ == '__main__':
 
     count=0
     #tiempo que aparece la ventana para leer la senha en segundos
-    tiempo=5
+    tiempo=8
     #empieza la cuenta
     inicio_tiempo=time.time()
     # captura webcam
@@ -204,7 +205,7 @@ if __name__ == '__main__':
 
         # Clasificacion basada en el algoritmo de CNN
         if args.solve_by == 0:
-            score_label = predic_por_CNN(keypoint_coord3d_v, known_finger_poses, args.pb_file, args.threshold)
+            score_label = predic_por_RedNeuronal(keypoint_coord3d_v, known_finger_poses, args.pb_file, args.threshold)
 
         #clasificacion basada en geometria de dedos
         elif args.solve_by == 1:

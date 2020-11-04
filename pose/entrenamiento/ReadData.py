@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.utils import shuffle
 from math import ceil
 
-def read_data_files(data_files, limit_data_count):
+def Leer_data_files(data_files, limit_data_count):
     # Asegúrese de que las rutas de archivo estén presentes en una lista
     # Se etiquetará según la entrada en la lista
     # limit_data_count: límite superior de la cantidad de entradas permitidas para cada tipo.
@@ -23,7 +23,8 @@ def read_data_files(data_files, limit_data_count):
 
     return X_data, y_data
 
-def split_data(X_data, y_data, split_ratio):
+def separar_data(X_data, y_data, split_ratio):
+    #randomniza la data, mezcla
     X_data, y_data = shuffle(X_data, y_data)
     split_at = int(ceil(len(y_data) * split_ratio))
     X_train, y_train = X_data[:split_at, :], y_data[:split_at]

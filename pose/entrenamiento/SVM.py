@@ -8,7 +8,7 @@ from sklearn import svm
 from sklearn.metrics import accuracy_score
 
 sys.path.insert(0, '/home/any/Imágenes/tesis/')
-from pose.entrenamiento.ReadData import read_data_files, split_data
+from pose.entrenamiento.ReadData import Leer_data_files, separar_data
 
 
 def parse_args():
@@ -44,8 +44,8 @@ if __name__ == '__main__':
 	args = parse_args()
 
 	data_files = [os.path.abspath(p.strip()) for p in args.csv_files.split(',')]
-	X_data, y_data = read_data_files(data_files, args.max_samples)
-	train_data, test_data = split_data(X_data, y_data, args.train_test_split)
+	X_data, y_data = Leer_data_files(data_files, args.max_samples)
+	train_data, test_data = separar_data(X_data, y_data, args.train_test_split)
 
 	# Si no se menciona el folder de salida, entonces se crea uno
 	# Se limpia y se crea de nuevo.
