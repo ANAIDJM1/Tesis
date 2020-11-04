@@ -161,7 +161,7 @@ if __name__ == '__main__':
     data_files, output_path = prepara_entrada(data_path, data_path2)
     if not os.path.exists(output_path):
         os.mkdir(output_path)
-    known_finger_poses = crear_poses_conocidasDedos()
+    Poses_dedo_conocidas = crear_poses_conocidasDedos()
 
     # ENTRADA DE RED
     image_tf = tf.placeholder(tf.float32, shape=(1, 240, 320, 3))
@@ -177,7 +177,7 @@ if __name__ == '__main__':
     gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.8)
     sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
-    # INICIA RED CNN
+    # INICIA RED NEURONAL CONVOLUCIONAL CNN ZIMERMANN
     net.init(sess)
 
     # Alimenta la imagen a  travez de la red -  procesa la imagen
@@ -205,15 +205,15 @@ if __name__ == '__main__':
 
         # Clasificacion basada en el algoritmo de CNN
         if args.solve_by == 0:
-            score_label = predic_por_RedNeuronal(keypoint_coord3d_v, known_finger_poses, args.pb_file, args.threshold)
+            score_label = predic_por_RedNeuronal(keypoint_coord3d_v, Poses_dedo_conocidas, args.pb_file, args.threshold)
 
         #clasificacion basada en geometria de dedos
         elif args.solve_by == 1:
-            score_label = prediccion_por_geometria(keypoint_coord3d_v, known_finger_poses, args.threshold)
+            score_label = prediccion_por_geometria(keypoint_coord3d_v, Poses_dedo_conocidas, args.threshold)
 
         #Clasificacion basada en SVM
         elif args.solve_by == 2:
-            score_label = prediccion_por_svm(keypoint_coord3d_v, known_finger_poses, args.svc_file)
+            score_label = prediccion_por_svm(keypoint_coord3d_v, Poses_dedo_conocidas, args.svc_file)
 
 
         font = cv2.FONT_HERSHEY_SIMPLEX
@@ -265,8 +265,8 @@ if __name__ == '__main__':
     for f in fotos1:
         os.remove(f)
     #borrar elementos de pose/test_data_salida
-    #fotos2 = glob.glob('./pose/test_data_salida/*')
-    #for f2 in fotos2:
-    #    os.remove(f2)
+    fotos2 = glob.glob('./pose/test_data_salida/*')
+    for f2 in fotos2:
+        os.remove(f2)
 
 
