@@ -69,6 +69,7 @@ los videos procesados de las letras del abeceario de LSP.
 
 Nota: Antes de volver a correr no olvide vaciar las carpetas pose/test_data, pose/test_data_salida 
 
+Revisar Branch Version 2 para la actualizacion de ciertas librerias.
 ------------------------------------
 LIBRERIAS IMPORTANTES (VERSIONES USADAS):
 imageio (2.9.0)
